@@ -1,0 +1,76 @@
+{
+    "manifest_version": 3,
+    "name": "Bin Extension",
+    "version": "1.0",
+    "icons": {
+        "16": "images/icon-16.png",
+        "48": "images/icon-48.png",
+        "128": "images/icon-128.png"
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "history",
+        "storage",
+        "webNavigation",
+        "scripting"
+    ],
+    "host_permissions": [
+        "http://192.168.100.1/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_title": "Default Title Placeholder",
+        "default_popup": "popup.html"
+    },
+    "default_locale": "en",
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+Y",
+                "mac": "MacCtrl+B"
+            },
+            "description": "Activate the extension popup window"
+        },
+        "quick_search": {
+            "suggested_key": {
+                "default": "Alt+S",
+                "mac": "MacCtrl+S"
+            },
+            "description": "Quick search selected text or open link"
+        }
+    },
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "css": [
+                "block.css"
+            ],
+            "js": [
+                "helpers.js",
+                "libs/mutation-summary.js",
+                "contentFilterDesktop_contextButtons.js"
+            ],
+            "matches": [
+                "*://*.youtube.com/*"
+            ],
+            "run_at": "document_start"
+        },
+        {
+            "matches": [
+                "http://192.168.100.1/cgi-bin/luci/*"
+            ],
+            "js": [
+                "iStoreAutoLogin.js"
+            ],
+            "run_at": "document_idle"
+        },
+        {
+            "matches": ["<all_urls>"],
+            "js": ["quickSearch.js"],
+            "run_at": "document_end"
+        }
+    ]
+}
