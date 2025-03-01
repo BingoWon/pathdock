@@ -5,8 +5,8 @@ html {
     /* max: 600px, Edge doesn't allow bigger value.*/
     overflow: hidden;
     /* Hide scrollbars by preventing overflow */
-    font-family: 'XHei Intel', sans-serif;
-    /* Set the font for all text */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'XHei Intel', sans-serif;
+    /* Set the font for all text, using system fonts on macOS */
 }
 
 #buttons-container {

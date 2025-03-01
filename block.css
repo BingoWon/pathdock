@@ -7,7 +7,7 @@ html[blockedByUnTrap] body {
 }
 
 #youtubeBlockedBox {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
     position: fixed;
     text-align: center;
     width: 100%;
