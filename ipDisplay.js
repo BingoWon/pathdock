@@ -23,10 +23,9 @@ fetch('https://ipapi.co/json/')
         cityIspInfo.id = 'city-isp-info';
         cityIspInfo.textContent = `${data.city} (${data.org || 'Unknown'})`;
         
-        // Add information to the send-url button
-        const sendUrlButton = document.getElementById('send-url');
-        sendUrlButton.appendChild(ipInfoContainer);
-        ipInfoContainer.appendChild(publicIpElement);
+        // Add information to the ip-info-wrapper div, not directly to the button
+        const ipInfoWrapper = document.querySelector('.ip-info-wrapper');
+        ipInfoWrapper.appendChild(ipInfoContainer);
         ipInfoContainer.appendChild(locationInfo);
         ipInfoContainer.appendChild(cityIspInfo);
     })
@@ -58,12 +57,9 @@ fetch('https://ipapi.co/json/')
                 cityIspInfo.id = 'city-isp-info';
                 cityIspInfo.textContent = `${data.city} (${data.org || 'Unknown'})`;
                 
-                // Add information to the send-url button
-                const sendUrlButton = document.getElementById('send-url');
-                const publicIpElement = document.getElementById('public-ip');
-                
-                sendUrlButton.appendChild(ipInfoContainer);
-                ipInfoContainer.appendChild(publicIpElement);
+                // Add information to the ip-info-wrapper div, not directly to the button
+                const ipInfoWrapper = document.querySelector('.ip-info-wrapper');
+                ipInfoWrapper.appendChild(ipInfoContainer);
                 ipInfoContainer.appendChild(locationInfo);
                 ipInfoContainer.appendChild(cityIspInfo);
             })
