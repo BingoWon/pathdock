@@ -16,19 +16,19 @@ fetch('https://ipapi.co/json/')
         const locationInfo = document.createElement('span');
         locationInfo.id = 'location-info';
         // Simplified location information for compact display
-        locationInfo.textContent = `Location: ${data.country_name} ${data.region} ${data.city}`;
+        locationInfo.textContent = `Location: ${data.country_name}, ${data.region}`;
         
-        // Create ISP information element
-        const ispInfo = document.createElement('span');
-        ispInfo.id = 'isp-info';
-        ispInfo.textContent = `ISP: ${data.org || 'Unknown'}`;
+        // Create city and ISP information element (combined to save space)
+        const cityIspInfo = document.createElement('span');
+        cityIspInfo.id = 'city-isp-info';
+        cityIspInfo.textContent = `${data.city} (${data.org || 'Unknown'})`;
         
-        // Add location information to the send-url button
+        // Add information to the send-url button
         const sendUrlButton = document.getElementById('send-url');
         sendUrlButton.appendChild(ipInfoContainer);
         ipInfoContainer.appendChild(publicIpElement);
         ipInfoContainer.appendChild(locationInfo);
-        ipInfoContainer.appendChild(ispInfo);
+        ipInfoContainer.appendChild(cityIspInfo);
     })
     .catch(error => {
         console.error('Error fetching IP info from ipapi.co:', error);
@@ -51,12 +51,12 @@ fetch('https://ipapi.co/json/')
                 // Create location information element
                 const locationInfo = document.createElement('span');
                 locationInfo.id = 'location-info';
-                locationInfo.textContent = `Location: ${data.country} ${data.region} ${data.city}`;
+                locationInfo.textContent = `Location: ${data.country}, ${data.region}`;
                 
-                // Create ISP information element
-                const ispInfo = document.createElement('span');
-                ispInfo.id = 'isp-info';
-                ispInfo.textContent = `ISP: ${data.org || 'Unknown'}`;
+                // Create city and ISP information element (combined to save space)
+                const cityIspInfo = document.createElement('span');
+                cityIspInfo.id = 'city-isp-info';
+                cityIspInfo.textContent = `${data.city} (${data.org || 'Unknown'})`;
                 
                 // Add information to the send-url button
                 const sendUrlButton = document.getElementById('send-url');
@@ -65,7 +65,7 @@ fetch('https://ipapi.co/json/')
                 sendUrlButton.appendChild(ipInfoContainer);
                 ipInfoContainer.appendChild(publicIpElement);
                 ipInfoContainer.appendChild(locationInfo);
-                ipInfoContainer.appendChild(ispInfo);
+                ipInfoContainer.appendChild(cityIspInfo);
             })
             .catch(error => console.error('Error fetching IP info from backup API:', error));
     });

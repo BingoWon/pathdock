@@ -326,9 +326,10 @@ button>span {
     color: #f0f0f0;
 }
 
-#isp-info {
+#city-isp-info {
     color: #e0e0e0;
     font-style: italic;
+    font-size: 11px;
 }
 
 /* popup.css */
