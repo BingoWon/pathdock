@@ -271,11 +271,64 @@ button>span {
     /* Increase font size */
     transition: background-color 0.3s ease;
     /* Smooth transition for background color */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: calc(100% - 40px); /* 调整宽度 */
+    max-width: 600px; /* 最大宽度 */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #send-url:hover {
     background-color: #45a049;
     /* Darker green on hover */
+}
+
+/* 按钮标题样式 */
+.button-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* IP信息包装器样式 */
+.ip-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* IP信息容器样式 */
+#ip-info-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 5px;
+}
+
+#ip-info-container span {
+    font-size: 12px;
+    line-height: 1.2;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#public-ip, #private-ip {
+    font-size: 12px;
+    line-height: 1.2;
+    margin-top: 2px;
+}
+
+#location-info {
+    color: #f0f0f0;
+}
+
+#isp-info {
+    color: #e0e0e0;
+    font-style: italic;
 }
 
 /* popup.css */
