@@ -4,18 +4,23 @@
 fetch('https://ipapi.co/json/')
     .then(response => response.json())
     .then(data => {
-        // Display public IP information
+        // Create IP info container
+        const ipInfoContainer = document.createElement('div');
+        ipInfoContainer.id = 'ip-info-container';
+        
+        // Display public IP information with complete location (country, region, city)
         const publicIpElement = document.getElementById('public-ip');
-        publicIpElement.textContent = `Public IP: ${data.ip}`;
+        publicIpElement.textContent = `Public IP: ${data.ip} (${data.country_name}, ${data.region}, ${data.city})`;
         
-        // Update location information element
+        // Hide the location info and city-isp-info elements since we combined them with public IP
         const locationInfo = document.getElementById('location-info');
-        // Simplified location information for compact display
-        locationInfo.textContent = `Location: ${data.country_name}, ${data.region}`;
+        locationInfo.style.display = 'none';
         
-        // Update city and ISP information element
         const cityIspInfo = document.getElementById('city-isp-info');
-        cityIspInfo.textContent = `${data.city} (${data.org || 'Unknown'})`;
+        cityIspInfo.style.display = 'none';
+        
+        // Add information to the ip-info-wrapper div, not directly to the button
+        const ipInfoWrapper = document.querySelector('.ip-info-wrapper');
     })
     .catch(error => {
         console.error('Error fetching IP info from ipapi.co:', error);
@@ -31,13 +36,19 @@ fetch('https://ipapi.co/json/')
             })
             .then(response => response.json())
             .then(data => {
-                // Update location information element
-                const locationInfo = document.getElementById('location-info');
-                locationInfo.textContent = `Location: ${data.country}, ${data.region}`;
+                // Combine public IP with complete location information
+                const publicIpElement = document.getElementById('public-ip');
+                publicIpElement.textContent = `Public IP: ${publicIpElement.textContent.split(' ')[2]} (${data.country}, ${data.region}, ${data.city})`;
                 
-                // Update city and ISP information element
+                // Hide the location info and city-isp-info elements
+                const locationInfo = document.getElementById('location-info');
+                locationInfo.style.display = 'none';
+                
                 const cityIspInfo = document.getElementById('city-isp-info');
-                cityIspInfo.textContent = `${data.city} (${data.org || 'Unknown'})`;
+                cityIspInfo.style.display = 'none';
+                
+                // Add information to the ip-info-wrapper div, not directly to the button
+                const ipInfoWrapper = document.querySelector('.ip-info-wrapper');
             })
             .catch(error => console.error('Error fetching IP info from backup API:', error));
     });
