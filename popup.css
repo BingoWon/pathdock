@@ -258,7 +258,7 @@ button>span {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: #4c89af;
-    /* Green background */
+    /* Blue background */
     color: white;
     /* White text */
     border: none;
@@ -274,8 +274,8 @@ button>span {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: calc(100% - 40px); /* 调整宽度 */
-    max-width: 600px; /* 最大宽度 */
+    width: calc(100% - 40px); /* Adjust width */
+    max-width: 600px; /* Maximum width */
     margin-left: auto;
     margin-right: auto;
 }
@@ -285,21 +285,21 @@ button>span {
     /* Darker green on hover */
 }
 
-/* 按钮标题样式 */
+/* Button title styles */
 .button-title {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-/* IP信息包装器样式 */
+/* IP info wrapper styles */
 .ip-info-wrapper {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-/* IP信息容器样式 */
+/* IP info container styles */
 #ip-info-container {
     display: flex;
     flex-direction: column;

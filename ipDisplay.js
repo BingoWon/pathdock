@@ -1,29 +1,29 @@
 // ipDisplay.js
 
-// 使用更可靠的API获取公网IP和归属地信息
+// Use a reliable API to fetch public IP and location information
 fetch('https://ipapi.co/json/')
     .then(response => response.json())
     .then(data => {
-        // 创建IP信息容器
+        // Create IP info container
         const ipInfoContainer = document.createElement('div');
         ipInfoContainer.id = 'ip-info-container';
         
-        // 显示公网IP和归属地信息
+        // Display public IP information
         const publicIpElement = document.getElementById('public-ip');
-        publicIpElement.textContent = `公网IP: ${data.ip}`;
+        publicIpElement.textContent = `Public IP: ${data.ip}`;
         
-        // 创建归属地信息元素
+        // Create location information element
         const locationInfo = document.createElement('span');
         locationInfo.id = 'location-info';
-        // 简化归属地信息，使其更紧凑
-        locationInfo.textContent = `归属: ${data.country_name} ${data.region} ${data.city}`;
+        // Simplified location information for compact display
+        locationInfo.textContent = `Location: ${data.country_name} ${data.region} ${data.city}`;
         
-        // 创建ISP信息元素
+        // Create ISP information element
         const ispInfo = document.createElement('span');
         ispInfo.id = 'isp-info';
-        ispInfo.textContent = `ISP: ${data.org || '未知'}`;
+        ispInfo.textContent = `ISP: ${data.org || 'Unknown'}`;
         
-        // 将归属地信息添加到send-url按钮中
+        // Add location information to the send-url button
         const sendUrlButton = document.getElementById('send-url');
         sendUrlButton.appendChild(ipInfoContainer);
         ipInfoContainer.appendChild(publicIpElement);
@@ -32,33 +32,33 @@ fetch('https://ipapi.co/json/')
     })
     .catch(error => {
         console.error('Error fetching IP info from ipapi.co:', error);
-        // 备用API
+        // Backup API
         fetch('https://api.ipify.org?format=json')
             .then(response => response.json())
             .then(data => {
                 const publicIpElement = document.getElementById('public-ip');
-                publicIpElement.textContent = `公网IP: ${data.ip}`;
+                publicIpElement.textContent = `Public IP: ${data.ip}`;
                 
-                // 使用IP获取归属地信息
+                // Use IP to get location information
                 return fetch(`https://ipinfo.io/${data.ip}/json`);
             })
             .then(response => response.json())
             .then(data => {
-                // 创建IP信息容器
+                // Create IP info container
                 const ipInfoContainer = document.createElement('div');
                 ipInfoContainer.id = 'ip-info-container';
                 
-                // 创建归属地信息元素
+                // Create location information element
                 const locationInfo = document.createElement('span');
                 locationInfo.id = 'location-info';
-                locationInfo.textContent = `归属: ${data.country} ${data.region} ${data.city}`;
+                locationInfo.textContent = `Location: ${data.country} ${data.region} ${data.city}`;
                 
-                // 创建ISP信息元素
+                // Create ISP information element
                 const ispInfo = document.createElement('span');
                 ispInfo.id = 'isp-info';
-                ispInfo.textContent = `ISP: ${data.org || '未知'}`;
+                ispInfo.textContent = `ISP: ${data.org || 'Unknown'}`;
                 
-                // 将信息添加到send-url按钮中
+                // Add information to the send-url button
                 const sendUrlButton = document.getElementById('send-url');
                 const publicIpElement = document.getElementById('public-ip');
                 
@@ -70,9 +70,9 @@ fetch('https://ipapi.co/json/')
             .catch(error => console.error('Error fetching IP info from backup API:', error));
     });
 
-// 获取本地IP地址 - 改进版
+// Get local IP address - improved version
 function getLocalIP() {
-    // 使用RTCPeerConnection获取本地IP
+    // Use RTCPeerConnection to get local IP
     const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
     const pc = new RTCPeerConnection({ iceServers: [] });
     pc.createDataChannel('');
@@ -80,7 +80,7 @@ function getLocalIP() {
         .then(offer => pc.setLocalDescription(offer))
         .catch(error => console.error('Error creating offer:', error));
 
-    // 收集候选IP
+    // Collect candidate IPs
     const candidates = [];
 
     pc.onicecandidate = (ice) => {
@@ -91,10 +91,10 @@ function getLocalIP() {
 
     pc.onicegatheringstatechange = () => {
         if (pc.iceGatheringState === 'complete') {
-            // 首先尝试找到192.168.开头的IP（常见内网IP）
+            // First try to find IPs starting with 192.168. (common private IPs)
             let foundIP = false;
             
-            // 按优先级查找内网IP
+            // Search for private IPs by priority
             const prefixes = ['192.168.', '10.', '172.16.', '172.17.', '172.18.', '172.19.', '172.20.', '172.21.', '172.22.', '172.23.', '172.24.', '172.25.', '172.26.', '172.27.', '172.28.', '172.29.', '172.30.', '172.31.'];
             
             for (const prefix of prefixes) {
@@ -102,7 +102,7 @@ function getLocalIP() {
                     const candidate = candidates[i];
                     const ipMatch = candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
                     if (ipMatch && ipMatch[0].startsWith(prefix)) {
-                        document.getElementById('private-ip').textContent = `内网IP: ${ipMatch[0]}`;
+                        document.getElementById('private-ip').textContent = `Local IP: ${ipMatch[0]}`;
                         foundIP = true;
                         break;
                     }
@@ -110,23 +110,23 @@ function getLocalIP() {
                 if (foundIP) break;
             }
             
-            // 如果没有找到内网IP，显示任何找到的IP
+            // If no private IP is found, display any IP found
             if (!foundIP && candidates.length > 0) {
                 for (let i = 0; i < candidates.length; i++) {
                     const candidate = candidates[i];
                     const ipMatch = candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
-                    if (ipMatch && !ipMatch[0].startsWith('127.0.')) { // 排除localhost
-                        document.getElementById('private-ip').textContent = `本地IP: ${ipMatch[0]}`;
+                    if (ipMatch && !ipMatch[0].startsWith('127.0.')) { // Exclude localhost
+                        document.getElementById('private-ip').textContent = `Local IP: ${ipMatch[0]}`;
                         break;
                     }
                 }
             }
             
-            // 关闭连接
+            // Close connection
             pc.close();
         }
     };
 }
 
-// 执行获取本地IP的函数
+// Execute the function to get local IP
 getLocalIP();
