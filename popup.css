@@ -255,41 +255,26 @@ button>span {
 }
 
 #send-url {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #4c89af;
-    /* Blue background */
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #45a049;
     color: white;
-    /* White text */
     border: none;
-    /* No border */
-    border-radius: 5px;
-    /* Rounded corners */
+    border-radius: 0 0 5px 5px;
     cursor: pointer;
-    /* Pointer cursor on hover */
     font-size: 16px;
-    /* Increase font size */
+    font-weight: bold;
     transition: background-color 0.3s ease;
-    /* Smooth transition for background color */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: calc(100% - 40px); /* Adjust width */
-    max-width: 600px; /* Maximum width */
-    margin-left: auto;
-    margin-right: auto;
+    text-align: center;
 }
 
 #send-url:hover {
-    background-color: #45a049;
-    /* Darker green on hover */
+    background-color: #3d8b3d;
 }
 
 /* Button title styles */
 .button-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 5px;
+    display: inline-block;
 }
 
 /* IP info wrapper styles */
@@ -329,7 +314,7 @@ button>span {
 #city-isp-info {
     color: #e0e0e0;
     font-style: italic;
-    font-size: 11px;
+    font-size: 13px;
 }
 
 /* popup.css */
@@ -415,4 +400,47 @@ button>span {
     position: relative;
     width: 10vw;
     height: 3vh;
+}
+
+#ip-display-container {
+    margin: 10px auto;
+    width: calc(100% - 40px);
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#ip-info-box {
+    width: 100%;
+    background-color: #4c89af;
+    color: white;
+    border-radius: 5px 5px 0 0;
+    padding: 15px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+#ip-info-box span {
+    display: block;
+    margin: 5px 0;
+    font-size: 14px;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#private-ip, #public-ip {
+    font-weight: bold;
+}
+
+#location-info {
+    color: #f0f0f0;
+}
+
+#city-isp-info {
+    color: #e0e0e0;
+    font-style: italic;
+    font-size: 13px;
 }

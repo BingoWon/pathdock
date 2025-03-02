@@ -19,13 +19,17 @@
     <div id="history-container"></div>
     <!-- <button id="reset-layout">Reset Layout</button> -->
     <!-- <button id="init-layout">Initialize Layout</button> -->
-    <button id="send-url">
-        <span class="button-title">Send URL to Local Server</span>
-        <div class="ip-info-wrapper">
+    <div id="ip-display-container">
+        <div id="ip-info-box">
             <span id="private-ip">Local IP: Fetching...</span>
             <span id="public-ip">Public IP: Fetching...</span>
+            <span id="location-info"></span>
+            <span id="city-isp-info"></span>
         </div>
-    </button>
+        <button id="send-url">
+            <span class="button-title">Send URL to Local Server</span>
+        </button>
+    </div>
     <script src="ipDisplay.js"></script>
     <div id="tabs-container"></div>
     <div id="ignored-sites-container"></div>
