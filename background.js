@@ -72,10 +72,27 @@ chrome.webNavigation.onCompleted.addListener(function (details) {
     }
 }, { url: [{ urlMatches: "http://192.168.100.1/cgi-bin/luci/admin/quickstart" }] });
 
-// 处理快捷搜索和链接打开
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+// 监听来自内容脚本的消息
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === "openNewTab") {
         chrome.tabs.create({ url: request.url });
-        sendResponse({ success: true });
+    }
+});
+
+// 监听快捷键命令
+chrome.commands.onCommand.addListener(function(command) {
+    if (command === "quick_search" || command === "direct_search") {
+        // 获取当前活动标签页
+        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+            if (tabs.length > 0) {
+                const activeTab = tabs[0];
+                
+                // 向活动标签页发送消息，触发相应的搜索功能
+                chrome.tabs.sendMessage(activeTab.id, { 
+                    action: "triggerSearch",
+                    command: command
+                });
+            }
+        });
     }
 });
