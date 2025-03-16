@@ -30,7 +30,7 @@
         "_execute_action": {
             "suggested_key": {
                 "default": "Ctrl+Y",
-                "mac": "MacCtrl+Z"
+                "mac": "MacCtrl+B"
             },
             "description": "Activate the extension popup"
         },
