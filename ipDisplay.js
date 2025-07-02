@@ -1,114 +1,114 @@
 // ipDisplay.js
 
-// Use a reliable API to fetch public IP and location information
-fetch('https://ipapi.co/json/')
-    .then(response => response.json())
-    .then(data => {
-        // Create IP info container
-        const ipInfoContainer = document.createElement('div');
-        ipInfoContainer.id = 'ip-info-container';
-        
-        // Display public IP information with complete location (country, region, city)
-        const publicIpElement = document.getElementById('public-ip');
-        publicIpElement.textContent = `Public IP: ${data.ip} (${data.country_name}, ${data.region}, ${data.city})`;
-        
-        // Hide the location info and city-isp-info elements since we combined them with public IP
-        const locationInfo = document.getElementById('location-info');
-        locationInfo.style.display = 'none';
-        
-        const cityIspInfo = document.getElementById('city-isp-info');
-        cityIspInfo.style.display = 'none';
-        
-        // Add information to the ip-info-wrapper div, not directly to the button
-        const ipInfoWrapper = document.querySelector('.ip-info-wrapper');
-    })
-    .catch(error => {
-        console.error('Error fetching IP info from ipapi.co:', error);
-        // Backup API
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                const publicIpElement = document.getElementById('public-ip');
-                publicIpElement.textContent = `Public IP: ${data.ip}`;
-                
-                // Use IP to get location information
-                return fetch(`https://ipinfo.io/${data.ip}/json`);
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Combine public IP with complete location information
-                const publicIpElement = document.getElementById('public-ip');
-                publicIpElement.textContent = `Public IP: ${publicIpElement.textContent.split(' ')[2]} (${data.country}, ${data.region}, ${data.city})`;
-                
-                // Hide the location info and city-isp-info elements
-                const locationInfo = document.getElementById('location-info');
-                locationInfo.style.display = 'none';
-                
-                const cityIspInfo = document.getElementById('city-isp-info');
-                cityIspInfo.style.display = 'none';
-                
-                // Add information to the ip-info-wrapper div, not directly to the button
-                const ipInfoWrapper = document.querySelector('.ip-info-wrapper');
-            })
-            .catch(error => console.error('Error fetching IP info from backup API:', error));
+// Helper function to hide unused elements
+function hideUnusedElements() {
+    const elementsToHide = ['location-info', 'city-isp-info'];
+    elementsToHide.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.style.display = 'none';
+        }
     });
+}
 
-// Get local IP address - improved version
+// Helper function to update public IP display
+function updatePublicIPDisplay(ip, locationData = null) {
+    const publicIpElement = document.getElementById('public-ip');
+    if (locationData && locationData.country && locationData.region && locationData.city) {
+        publicIpElement.textContent = `Public IP: ${ip} (${locationData.country}, ${locationData.region}, ${locationData.city})`;
+    } else {
+        publicIpElement.textContent = `Public IP: ${ip}`;
+    }
+    hideUnusedElements();
+}
+
+// Fetch public IP and location information
+async function fetchPublicIPInfo() {
+    try {
+        // Get IP address
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        const ip = ipData.ip;
+
+        try {
+            // Try to get location information
+            const locationResponse = await fetch(`https://ipinfo.io/${ip}/json`);
+            const locationData = await locationResponse.json();
+            updatePublicIPDisplay(ip, locationData);
+        } catch (locationError) {
+            console.error('Error fetching location info:', locationError);
+            // Display IP without location if location fetch fails
+            updatePublicIPDisplay(ip);
+        }
+    } catch (error) {
+        console.error('Error fetching IP info:', error);
+    }
+}
+
+// Initialize public IP fetching
+fetchPublicIPInfo();
+
+// Helper function to extract IP from candidate string
+function extractIPFromCandidate(candidate) {
+    const ipMatch = candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
+    return ipMatch ? ipMatch[0] : null;
+}
+
+// Helper function to check if IP is private
+function isPrivateIP(ip) {
+    const privateRanges = [
+        '192.168.',
+        '10.',
+        // 172.16.0.0 to 172.31.255.255
+        '172.16.', '172.17.', '172.18.', '172.19.', '172.20.', '172.21.', '172.22.', '172.23.',
+        '172.24.', '172.25.', '172.26.', '172.27.', '172.28.', '172.29.', '172.30.', '172.31.'
+    ];
+    return privateRanges.some(range => ip.startsWith(range));
+}
+
+// Helper function to find best local IP from candidates
+function findBestLocalIP(candidates) {
+    const ips = candidates
+        .map(extractIPFromCandidate)
+        .filter(ip => ip && !ip.startsWith('127.0.')); // Exclude localhost
+
+    // Prefer private IPs
+    const privateIP = ips.find(isPrivateIP);
+    if (privateIP) return privateIP;
+
+    // Return any valid IP if no private IP found
+    return ips[0] || null;
+}
+
+// Get local IP address using WebRTC
 function getLocalIP() {
-    // Use RTCPeerConnection to get local IP
-    const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-    const pc = new RTCPeerConnection({ iceServers: [] });
-    pc.createDataChannel('');
-    pc.createOffer()
-        .then(offer => pc.setLocalDescription(offer))
-        .catch(error => console.error('Error creating offer:', error));
+    try {
+        const pc = new RTCPeerConnection({ iceServers: [] });
+        const candidates = [];
 
-    // Collect candidate IPs
-    const candidates = [];
+        pc.createDataChannel('');
+        pc.createOffer()
+            .then(offer => pc.setLocalDescription(offer))
+            .catch(error => console.error('Error creating offer:', error));
 
-    pc.onicecandidate = (ice) => {
-        if (ice && ice.candidate && ice.candidate.candidate) {
-            candidates.push(ice.candidate.candidate);
-        }
-    };
-
-    pc.onicegatheringstatechange = () => {
-        if (pc.iceGatheringState === 'complete') {
-            // First try to find IPs starting with 192.168. (common private IPs)
-            let foundIP = false;
-            
-            // Search for private IPs by priority
-            const prefixes = ['192.168.', '10.', '172.16.', '172.17.', '172.18.', '172.19.', '172.20.', '172.21.', '172.22.', '172.23.', '172.24.', '172.25.', '172.26.', '172.27.', '172.28.', '172.29.', '172.30.', '172.31.'];
-            
-            for (const prefix of prefixes) {
-                for (let i = 0; i < candidates.length; i++) {
-                    const candidate = candidates[i];
-                    const ipMatch = candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
-                    if (ipMatch && ipMatch[0].startsWith(prefix)) {
-                        document.getElementById('private-ip').textContent = `Local IP: ${ipMatch[0]}`;
-                        foundIP = true;
-                        break;
-                    }
-                }
-                if (foundIP) break;
+        pc.onicecandidate = (ice) => {
+            if (ice?.candidate?.candidate) {
+                candidates.push(ice.candidate.candidate);
             }
-            
-            // If no private IP is found, display any IP found
-            if (!foundIP && candidates.length > 0) {
-                for (let i = 0; i < candidates.length; i++) {
-                    const candidate = candidates[i];
-                    const ipMatch = candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
-                    if (ipMatch && !ipMatch[0].startsWith('127.0.')) { // Exclude localhost
-                        document.getElementById('private-ip').textContent = `Local IP: ${ipMatch[0]}`;
-                        break;
-                    }
+        };
+
+        pc.onicegatheringstatechange = () => {
+            if (pc.iceGatheringState === 'complete') {
+                const localIP = findBestLocalIP(candidates);
+                if (localIP) {
+                    document.getElementById('private-ip').textContent = `Local IP: ${localIP}`;
                 }
+                pc.close();
             }
-            
-            // Close connection
-            pc.close();
-        }
-    };
+        };
+    } catch (error) {
+        console.error('Error getting local IP:', error);
+    }
 }
 
 // Execute the function to get local IP
