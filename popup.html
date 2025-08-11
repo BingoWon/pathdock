@@ -7,10 +7,16 @@
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <div id="youtube-search">
-        <input type="search" name="search_query" placeholder="Search YouTube..." required id="youtube-search-input">
-        <button type="submit">Search</button>
-        <button id="history-icon">📜</button>
+    <div id="top-bar">
+        <div id="youtube-search">
+            <input type="search" name="search_query" placeholder="Search YouTube..." required id="youtube-search-input">
+            <button type="submit">Search</button>
+            <button id="history-icon">📜</button>
+        </div>
+        <div id="ip-display">
+            <span id="public-ip">Loading IP...</span>
+            <button id="copy-ip-btn" title="Copy IP">📋</button>
+        </div>
     </div>
     <div id="history-dropdown" class="hidden">
         <ul id="history-list"></ul>
@@ -19,22 +25,12 @@
     <div id="history-container"></div>
     <!-- <button id="reset-layout">Reset Layout</button> -->
     <!-- <button id="init-layout">Initialize Layout</button> -->
-    <button id="send-url">
-        <span class="button-title">Send URL to Local Server</span>
-        <div class="ip-info-wrapper">
-            <span id="private-ip">Local IP: Fetching...</span>
-            <span id="public-ip">Public IP: Fetching...</span>
-            <span id="location-info"></span>
-            <span id="city-isp-info"></span>
-        </div>
-    </button>
-    <script src="ipDisplay.js"></script>
+
     <div id="tabs-container"></div>
     <div id="ignored-sites-container"></div>
     <script src="tabHotel.js"></script>
-    <script src="media_player.js"></script>
-    <script src="debug.js"></script>
     <script src="youtubeSearchBar.js"></script>
-    <script src="historyDropdown.js"></script> <!-- Add this line for the new JS file -->
+    <script src="historyDropdown.js"></script>
+    <script src="ipDisplay.js"></script>
 </body>
 </html>

@@ -11,12 +11,10 @@
         "tabs",
         "activeTab",
         "history",
-        "storage",
-        "webNavigation",
-        "scripting"
+        "storage"
     ],
     "host_permissions": [
-        "http://192.168.100.1/*"
+        "https://api.ipify.org/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -50,30 +48,6 @@
         }
     },
     "content_scripts": [
-        {
-            "all_frames": true,
-            "css": [
-                "block.css"
-            ],
-            "js": [
-                "helpers.js",
-                "libs/mutation-summary.js",
-                "contentFilterDesktop_contextButtons.js"
-            ],
-            "matches": [
-                "*://*.youtube.com/*"
-            ],
-            "run_at": "document_start"
-        },
-        {
-            "matches": [
-                "http://192.168.100.1/cgi-bin/luci/*"
-            ],
-            "js": [
-                "iStoreAutoLogin.js"
-            ],
-            "run_at": "document_idle"
-        },
         {
             "matches": ["<all_urls>"],
             "js": ["quickSearch.js"],
