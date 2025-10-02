@@ -13,24 +13,25 @@ document.addEventListener('DOMContentLoaded', () => {
         loadHistory();
     });
 
-    function loadHistory() {
-        chrome.storage.sync.get('ignoredSites', (data) => {
-            const ignoredSites = data.ignoredSites ? JSON.parse(data.ignoredSites) : [];
+    async function loadHistory() {
+        try {
+            const data = await chrome.storage.sync.get('ignoredUrls');
+            const ignoredUrls = data.ignoredUrls ? JSON.parse(data.ignoredUrls) : [];
 
             historyList.innerHTML = '';
 
-            if (ignoredSites.length === 0) {
+            if (ignoredUrls.length === 0) {
                 const emptyItem = document.createElement('li');
                 emptyItem.innerHTML = '<span style="color: #999; font-style: italic;">No ignored sites</span>';
                 historyList.appendChild(emptyItem);
                 return;
             }
 
-            ignoredSites.forEach((url, index) => {
+            ignoredUrls.forEach((url) => {
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
                     <span>${url}</span>
-                    <button class="close-icon" data-index="${index}">❌</button>
+                    <button class="close-icon" data-url="${url}">❌</button>
                 `;
                 historyList.appendChild(listItem);
             });
@@ -38,27 +39,35 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add event listeners for close icons
             const closeIcons = document.querySelectorAll('#history-list .close-icon');
             closeIcons.forEach(icon => {
-                icon.addEventListener('click', (e) => {
+                icon.addEventListener('click', async (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    const index = e.target.getAttribute('data-index');
-                    removeItem(index);
+                    const url = e.target.getAttribute('data-url');
+                    await removeItem(url);
                 });
             });
-        });
+        } catch (error) {
+            console.error('Failed to load ignored sites:', error);
+        }
     }
 
-    function removeItem(index) {
-        chrome.storage.sync.get('ignoredSites', (data) => {
-            let ignoredSites = data.ignoredSites ? JSON.parse(data.ignoredSites) : [];
-            ignoredSites.splice(parseInt(index), 1);
-            chrome.storage.sync.set({ ignoredSites: JSON.stringify(ignoredSites) }, () => {
-                loadHistory();
-                if (typeof checkUpdates === 'function') {
-                    checkUpdates();
-                }
-            });
-        });
+    async function removeItem(url) {
+        try {
+            // Use the app's siteManager if available
+            if (window.app?.siteManager) {
+                await window.app.siteManager.unignoreSite(url);
+                await window.app.update();
+            } else {
+                // Fallback to direct storage manipulation
+                const data = await chrome.storage.sync.get('ignoredUrls');
+                let ignoredUrls = data.ignoredUrls ? JSON.parse(data.ignoredUrls) : [];
+                ignoredUrls = ignoredUrls.filter(u => u !== url);
+                await chrome.storage.sync.set({ ignoredUrls: JSON.stringify(ignoredUrls) });
+            }
+            loadHistory();
+        } catch (error) {
+            console.error('Failed to remove ignored site:', error);
+        }
     }
 
     // Close dropdown when clicking outside
