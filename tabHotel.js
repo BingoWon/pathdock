@@ -5,7 +5,8 @@
 const CONFIG = {
     GRID_COLS: 5,
     GRID_ROWS: 8,
-    MAX_SITES: 5 * 8 - 1, // -1 for plus button
+    MAX_SITES: 5 * 8, // 40 total display slots
+    MAX_PINNED_SITES: 20, // Maximum pinned sites (rest filled with history)
     HISTORY_DAYS: 365,
     MAX_HISTORY_ITEMS: 10000,
     DEBOUNCE_MS: 300,
@@ -96,7 +97,7 @@ class StorageManager {
         });
     }
 
-    static async getSitesData() {
+    static async getSites() {
         const data = await this.get(CONFIG.STORAGE_KEYS.SITES);
         if (!data) {
             return { sites: [], lastModified: 0, deviceId: null };
@@ -217,7 +218,7 @@ class SyncManager {
         if (!change.newValue) return;
 
         const newData = JSON.parse(change.newValue);
-        const currentData = await StorageManager.getSitesData();
+        const currentData = await StorageManager.getSites();
 
         // Compare timestamps to determine which data is newer
         if (newData.lastModified > currentData.lastModified) {
@@ -254,7 +255,7 @@ class SiteManager {
 
     async initialize() {
         try {
-            const data = await StorageManager.getSitesData();
+            const data = await StorageManager.getSites();
             this.sites = data.sites || [];
             this.lastModified = data.lastModified || 0;
             this.deviceId = data.deviceId || null;
@@ -273,7 +274,7 @@ class SiteManager {
     }
 
     async reload() {
-        const data = await StorageManager.getSitesData();
+        const data = await StorageManager.getSites();
         this.sites = data.sites || [];
         this.lastModified = data.lastModified || 0;
         this.deviceId = data.deviceId || null;
@@ -323,15 +324,19 @@ class SiteManager {
         const pinnedSites = this.sites.filter(s => s.isPinned);
         const pinnedUrls = new Set(pinnedSites.map(s => s.url));
 
-        // Get top unpinned sites from history
+        // Calculate remaining slots for unpinned sites
+        const remainingSlots = CONFIG.MAX_SITES - pinnedSites.length;
+
+        // Get top unpinned sites from history (only take what we need)
         const unpinnedHistory = Array.from(historyMap.values())
             .filter(item => !pinnedUrls.has(item.url))
-            .sort((a, b) => b.visitCount - a.visitCount);
+            .sort((a, b) => b.visitCount - a.visitCount)
+            .slice(0, remainingSlots); // Only take remaining slots
 
         // Allocate positions
         const result = new Array(CONFIG.MAX_SITES).fill(null);
 
-        // Place pinned sites first
+        // Place pinned sites first (preserve their positions)
         pinnedSites.forEach(site => {
             if (site.position >= 0 && site.position < CONFIG.MAX_SITES) {
                 result[site.position] = { ...site };
@@ -340,8 +345,8 @@ class SiteManager {
 
         // Fill empty positions with top history items
         let historyIndex = 0;
-        for (let i = 0; i < CONFIG.MAX_SITES; i++) {
-            if (!result[i] && historyIndex < unpinnedHistory.length) {
+        for (let i = 0; i < CONFIG.MAX_SITES && historyIndex < unpinnedHistory.length; i++) {
+            if (!result[i]) {
                 const item = unpinnedHistory[historyIndex++];
                 result[i] = {
                     url: item.url,
@@ -421,22 +426,39 @@ class SiteManager {
         if (!tab?.url || !Utils.isValidUrl(tab.url)) return;
 
         const url = Utils.normalizeUrl(tab.url);
-
-        // Remove from ignored
         this.ignoredUrls.delete(url);
 
-        // Find or create site
         let site = this.getSiteByUrl(url);
-        if (!site) {
-            // Find first available position
-            const usedPositions = new Set(this.sites.map(s => s.position));
-            let position = 0;
-            while (usedPositions.has(position) && position < CONFIG.MAX_SITES) {
-                position++;
+        if (site) {
+            site.isPinned = true;
+            await this.save();
+            return;
+        }
+
+        const pinnedCount = this.sites.filter(s => s.isPinned).length;
+        if (pinnedCount >= CONFIG.MAX_PINNED_SITES) {
+            alert(`Cannot pin more than ${CONFIG.MAX_PINNED_SITES} sites. Please unpin some first.`);
+            return;
+        }
+
+        const position = this._findAvailablePosition();
+        if (position === -1) {
+            const unpinnedSite = this._findLowestUnpinned();
+            if (unpinnedSite) {
+                this.sites = this.sites.filter(s => s.url !== unpinnedSite.url);
+                this.sitesByUrl.delete(unpinnedSite.url);
+                site = {
+                    url,
+                    title: tab.title || new URL(url).hostname,
+                    position: unpinnedSite.position,
+                    isPinned: true,
+                    visitCount: 0
+                };
+            } else {
+                alert('All sites are pinned. Please unpin some first.');
+                return;
             }
-
-            if (position >= CONFIG.MAX_SITES) return; // No space
-
+        } else {
             site = {
                 url,
                 title: tab.title || new URL(url).hostname,
@@ -444,13 +466,29 @@ class SiteManager {
                 isPinned: true,
                 visitCount: 0
             };
-            this.sites.push(site);
-            this.sitesByUrl.set(url, site);
-        } else {
-            site.isPinned = true;
         }
 
+        this.sites.push(site);
+        this.sitesByUrl.set(url, site);
         await this.save();
+    }
+
+    _findAvailablePosition() {
+        const usedPositions = new Set(this.sites.map(s => s.position));
+        for (let i = 0; i < CONFIG.MAX_SITES; i++) {
+            if (!usedPositions.has(i)) {
+                return i;
+            }
+        }
+        return -1; // No available position
+    }
+
+    _findLowestUnpinned() {
+        const unpinned = this.sites.filter(s => !s.isPinned);
+        if (unpinned.length === 0) return null;
+        return unpinned.reduce((lowest, site) =>
+            site.visitCount < lowest.visitCount ? site : lowest
+        );
     }
 
     async ignoreSite(url) {
@@ -485,18 +523,29 @@ class UIRenderer {
     }
 
     _setupEventDelegation() {
-        // Event delegation for all button interactions
         this.container.addEventListener('click', (e) => this._handleClick(e));
         this.container.addEventListener('dragstart', (e) => this._handleDragStart(e));
         this.container.addEventListener('dragend', (e) => this._handleDragEnd(e));
         this.container.addEventListener('dragover', (e) => this._handleDragOver(e));
         this.container.addEventListener('drop', (e) => this._handleDrop(e));
+
+        const addButton = document.getElementById('add-current-btn');
+        if (addButton) {
+            addButton.addEventListener('click', async () => {
+                await this._handleAddCurrent();
+            });
+        } else {
+            console.error('Add button not found');
+        }
     }
 
     async render() {
         const sites = this.siteManager.sites;
         const existingUrls = new Set(this.buttonElements.keys());
         const currentUrls = new Set(sites.map(s => s.url));
+
+        // Update ignored count display
+        this._updateIgnoredCount();
 
         // Remove buttons for sites that no longer exist
         for (const url of existingUrls) {
@@ -516,9 +565,6 @@ class UIRenderer {
 
         // Reorder DOM to match positions
         this._reorderButtons(sites);
-
-        // Ensure plus button is last
-        this._ensurePlusButton();
     }
 
     _createButton(site) {
@@ -570,6 +616,13 @@ class UIRenderer {
         }
     }
 
+    _updateIgnoredCount() {
+        const element = document.getElementById('ignored-count');
+        if (element) {
+            element.textContent = `${this.siteManager.ignoredUrls.size} ignored`;
+        }
+    }
+
     _reorderButtons(sites) {
         const fragment = document.createDocumentFragment();
         sites.forEach(site => {
@@ -578,21 +631,8 @@ class UIRenderer {
         });
 
         // Clear and re-append in correct order
-        const plusButton = this.container.querySelector('.plus-button');
         this.container.innerHTML = '';
         this.container.appendChild(fragment);
-        if (plusButton) this.container.appendChild(plusButton);
-    }
-
-    _ensurePlusButton() {
-        let plusButton = this.container.querySelector('.plus-button');
-        if (!plusButton) {
-            plusButton = document.createElement('button');
-            plusButton.className = 'plus-button';
-            plusButton.textContent = '➕';
-            plusButton.dataset.action = 'add-current';
-            this.container.appendChild(plusButton);
-        }
     }
 
     _getFaviconUrl(url) {
@@ -614,11 +654,10 @@ class UIRenderer {
     }
 
     async _handleClick(e) {
-        // Check if clicked on an action element (pin, close, etc.)
+        // Check if clicked on an action element (pin, close)
         const actionElement = e.target.closest('[data-action]');
 
         if (actionElement) {
-            // Prevent event bubbling and default behavior immediately
             e.stopPropagation();
             e.preventDefault();
 
@@ -630,15 +669,12 @@ class UIRenderer {
                 case 'close':
                     await this._handleCloseClick(e);
                     break;
-                case 'add-current':
-                    await this._handleAddCurrent();
-                    break;
             }
             return;
         }
 
         // No action element clicked - open URL
-        const button = e.target.closest('.button:not(.plus-button)');
+        const button = e.target.closest('.button');
         if (button) {
             closeAllNewTabs();
             chrome.tabs.create({ url: button.dataset.url });
@@ -661,13 +697,16 @@ class UIRenderer {
     }
 
     async _handleAddCurrent() {
-        await this.siteManager.addCurrentTab();
-        await this.siteManager.updateFromHistory();
-        await this.render();
+        try {
+            await this.siteManager.addCurrentTab();
+            await this.render();
+        } catch (error) {
+            console.error('Error in _handleAddCurrent:', error);
+        }
     }
 
     _handleDragStart(e) {
-        const button = e.target.closest('.button:not(.plus-button)');
+        const button = e.target.closest('.button');
         if (!button) return;
 
         this.draggedElement = button;
@@ -690,12 +729,12 @@ class UIRenderer {
     async _handleDrop(e) {
         e.preventDefault();
 
-        const dropTarget = e.target.closest('.button:not(.plus-button)');
+        const dropTarget = e.target.closest('.button');
         if (!dropTarget || !this.draggedElement || dropTarget === this.draggedElement) {
             return;
         }
 
-        const buttons = [...this.container.querySelectorAll('.button:not(.plus-button)')];
+        const buttons = [...this.container.querySelectorAll('.button')];
         const fromIndex = buttons.indexOf(this.draggedElement);
         const toIndex = buttons.indexOf(dropTarget);
 

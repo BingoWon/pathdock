@@ -8,26 +8,24 @@
 </head>
 <body>
     <div id="top-bar">
+        <div id="ip-display">
+            <span id="public-ip">Loading IP...</span>
+            <button id="copy-ip-btn" title="Copy IP">📋</button>
+        </div>
         <div id="youtube-search">
             <input type="search" name="search_query" placeholder="Search YouTube..." required id="youtube-search-input">
             <button type="submit">Search</button>
             <button id="history-icon">📜</button>
         </div>
-        <div id="ip-display">
-            <span id="public-ip">Loading IP...</span>
-            <button id="copy-ip-btn" title="Copy IP">📋</button>
+        <div id="ignored-sites-display">
+            <span id="ignored-count">0 ignored</span>
         </div>
+        <button id="add-current-btn" class="add-button" title="Add current tab">➕</button>
     </div>
     <div id="history-dropdown" class="hidden">
         <ul id="history-list"></ul>
     </div>
     <div id="buttons-container"></div>
-    <div id="history-container"></div>
-    <!-- <button id="reset-layout">Reset Layout</button> -->
-    <!-- <button id="init-layout">Initialize Layout</button> -->
-
-    <div id="tabs-container"></div>
-    <div id="ignored-sites-container"></div>
     <script src="tabHotel.js"></script>
     <script src="youtubeSearchBar.js"></script>
     <script src="historyDropdown.js"></script>
