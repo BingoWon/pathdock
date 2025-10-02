@@ -49,10 +49,6 @@ const Utils = {
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
-    },
-
-    async sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 };
 
@@ -61,6 +57,9 @@ const Utils = {
 // ============================================================================
 
 class StorageManager {
+    static _localChangeFlag = false;
+    static _localChangeTimer = null;
+
     static async get(key) {
         return new Promise((resolve, reject) => {
             chrome.storage.sync.get(key, (data) => {
@@ -97,13 +96,26 @@ class StorageManager {
         });
     }
 
-    static async getSites() {
+    static async getSitesData() {
         const data = await this.get(CONFIG.STORAGE_KEYS.SITES);
-        return data ? JSON.parse(data) : [];
+        if (!data) {
+            return { sites: [], lastModified: 0, deviceId: null };
+        }
+        return JSON.parse(data);
     }
 
-    static async setSites(sites) {
-        await this.set(CONFIG.STORAGE_KEYS.SITES, JSON.stringify(sites));
+    static async setSites(sites, isLocalChange = true) {
+        const payload = {
+            sites,
+            lastModified: Date.now(),
+            deviceId: this._getDeviceId()
+        };
+
+        if (isLocalChange) {
+            this._markLocalChange();
+        }
+
+        await this.set(CONFIG.STORAGE_KEYS.SITES, JSON.stringify(payload));
     }
 
     static async getIgnoredUrls() {
@@ -111,7 +123,10 @@ class StorageManager {
         return data ? new Set(JSON.parse(data)) : new Set();
     }
 
-    static async setIgnoredUrls(ignoredUrls) {
+    static async setIgnoredUrls(ignoredUrls, isLocalChange = true) {
+        if (isLocalChange) {
+            this._markLocalChange();
+        }
         await this.set(CONFIG.STORAGE_KEYS.IGNORED, JSON.stringify([...ignoredUrls]));
     }
 
@@ -130,6 +145,27 @@ class StorageManager {
 
     static async setVersion(version) {
         await this.set('version', version);
+    }
+
+    static _getDeviceId() {
+        let deviceId = localStorage.getItem('deviceId');
+        if (!deviceId) {
+            deviceId = `device_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            localStorage.setItem('deviceId', deviceId);
+        }
+        return deviceId;
+    }
+
+    static _markLocalChange() {
+        this._localChangeFlag = true;
+        clearTimeout(this._localChangeTimer);
+        this._localChangeTimer = setTimeout(() => {
+            this._localChangeFlag = false;
+        }, 200);
+    }
+
+    static isLocalChange() {
+        return this._localChangeFlag;
     }
 }
 
@@ -230,9 +266,9 @@ class MigrationManager {
             });
         }
 
-        // 4. Save new data
-        await StorageManager.setSites(sites);
-        await StorageManager.setIgnoredUrls(ignoredUrls);
+        // 4. Save new data (with metadata)
+        await StorageManager.setSites(sites, true);
+        await StorageManager.setIgnoredUrls(ignoredUrls, true);
 
         console.log('✅ Migration v0 → v1 completed:', {
             migratedSites: sites.length,
@@ -285,6 +321,94 @@ class MigrationManager {
 }
 
 // ============================================================================
+// SYNC MANAGER - Cross-Device Synchronization
+// ============================================================================
+
+class SyncManager {
+    constructor(app) {
+        this.app = app;
+        this.isListening = false;
+    }
+
+    startListening() {
+        if (this.isListening) return;
+
+        chrome.storage.onChanged.addListener((changes, areaName) => {
+            this._handleStorageChange(changes, areaName);
+        });
+
+        this.isListening = true;
+        console.log('🔄 Sync manager started listening for remote changes');
+    }
+
+    async _handleStorageChange(changes, areaName) {
+        // Only handle sync storage
+        if (areaName !== 'sync') return;
+
+        // Ignore local changes (changes we made ourselves)
+        if (StorageManager.isLocalChange()) {
+            console.log('📝 Local change detected, skipping sync');
+            return;
+        }
+
+        // Check if sites or ignoredUrls changed
+        const sitesChanged = changes[CONFIG.STORAGE_KEYS.SITES];
+        const ignoredChanged = changes[CONFIG.STORAGE_KEYS.IGNORED];
+
+        if (!sitesChanged && !ignoredChanged) return;
+
+        console.log('🌐 Remote change detected from another device');
+
+        // Handle sites change
+        if (sitesChanged) {
+            await this._handleSitesChange(sitesChanged);
+        }
+
+        // Handle ignored URLs change
+        if (ignoredChanged) {
+            await this._handleIgnoredChange(ignoredChanged);
+        }
+
+        // Update UI
+        await this.app.uiRenderer.render();
+
+        // Show notification
+        this._showSyncNotification();
+    }
+
+    async _handleSitesChange(change) {
+        if (!change.newValue) return;
+
+        const newData = JSON.parse(change.newValue);
+        const currentData = await StorageManager.getSitesData();
+
+        // Compare timestamps to determine which data is newer
+        if (newData.lastModified > currentData.lastModified) {
+            console.log('✅ Applying remote sites data (newer)');
+            this.app.siteManager.sites = newData.sites || [];
+            this.app.siteManager.lastModified = newData.lastModified;
+            this.app.siteManager.deviceId = newData.deviceId;
+            this.app.siteManager._rebuildIndex();
+        } else {
+            console.log('⏭️ Skipping remote sites data (older or same)');
+        }
+    }
+
+    async _handleIgnoredChange(change) {
+        const newValue = change.newValue ? JSON.parse(change.newValue) : [];
+        console.log('✅ Applying remote ignored URLs');
+        this.app.siteManager.ignoredUrls = new Set(newValue);
+    }
+
+    _showSyncNotification() {
+        console.log('✨ Data synced from another device');
+
+        // Optional: Show visual notification
+        // Could be enhanced with a toast notification in the UI
+    }
+}
+
+// ============================================================================
 // SITE MANAGER - Core Business Logic
 // ============================================================================
 
@@ -293,22 +417,37 @@ class SiteManager {
         this.sites = [];
         this.ignoredUrls = new Set();
         this.sitesByUrl = new Map();
+        this.lastModified = 0;
+        this.deviceId = null;
     }
 
     async initialize() {
         try {
-            // Load saved state
-            this.sites = await StorageManager.getSites();
+            const data = await StorageManager.getSitesData();
+            this.sites = data.sites || [];
+            this.lastModified = data.lastModified || 0;
+            this.deviceId = data.deviceId || null;
+
             this.ignoredUrls = await StorageManager.getIgnoredUrls();
             this._rebuildIndex();
 
-            // Fetch and merge with history
             await this.updateFromHistory();
         } catch (error) {
             console.error('Failed to initialize:', error);
             this.sites = [];
             this.ignoredUrls = new Set();
+            this.lastModified = 0;
+            this.deviceId = null;
         }
+    }
+
+    async reload() {
+        const data = await StorageManager.getSitesData();
+        this.sites = data.sites || [];
+        this.lastModified = data.lastModified || 0;
+        this.deviceId = data.deviceId || null;
+        this.ignoredUrls = await StorageManager.getIgnoredUrls();
+        this._rebuildIndex();
     }
 
     async updateFromHistory() {
@@ -738,6 +877,7 @@ class UIRenderer {
 class App {
     constructor() {
         this.siteManager = new SiteManager();
+        this.syncManager = new SyncManager(this);
         this.uiRenderer = null;
         this.updateDebounced = Utils.debounce(() => this.update(), CONFIG.DEBOUNCE_MS);
     }
@@ -754,6 +894,9 @@ class App {
             // Step 3: Initialize UI renderer
             this.uiRenderer = new UIRenderer(this.siteManager);
             await this.uiRenderer.render();
+
+            // Step 4: Start sync manager
+            this.syncManager.startListening();
 
             console.log('✅ App initialized successfully');
 
@@ -774,6 +917,16 @@ class App {
             await this.uiRenderer.render();
         } catch (error) {
             console.error('❌ Failed to update:', error);
+        }
+    }
+
+    async reload() {
+        // Reload from storage (triggered by remote sync)
+        try {
+            await this.siteManager.reload();
+            await this.uiRenderer.render();
+        } catch (error) {
+            console.error('❌ Failed to reload:', error);
         }
     }
 
@@ -823,9 +976,9 @@ function closeAllNewTabs() {
 // INITIALIZATION
 // ============================================================================
 
-let app;
+window.app = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    app = new App();
-    await app.initialize();
+    window.app = new App();
+    await window.app.initialize();
 });
