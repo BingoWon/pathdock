@@ -2,6 +2,7 @@
     "manifest_version": 3,
     "name": "Bin Extension",
     "version": "1.0",
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2WUhb8xwLL6ai+KNqtBPyvmf0NYKpjKGHEz1/sg7zHN5hrjArK6uHu5shM5rNxrP/3IO6LiBQV0si+NkUZyp1Ss/5qs9Uo4V+Jq0x/k7i0caWLzzpnHXF7sBVH5tlozh7Fha9bM0VMVhKgIlLQYKgahFo0y/0gCAsOIc55mEKRljQH+UVj7ZrZFWuZhMf9QbvVjT00duBZ4+SoC0un+9Wi3QmQhQqPUT2k/fEOK2mIa6iclT/yNnC/9gwvDgSnEwtW/nReUyQ0CRTOiDMn5V4+96J6PkhkF2To2xAguASfGrajYlPHDHDCV/4PgyNibC/NBPy193nGR6f9nHZ92HawIDAQAB",
     "icons": {
         "16": "images/icon-16.png",
         "48": "images/icon-48.png",
