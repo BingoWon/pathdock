@@ -544,9 +544,6 @@ class UIRenderer {
         const existingUrls = new Set(this.buttonElements.keys());
         const currentUrls = new Set(sites.map(s => s.url));
 
-        // Update ignored count display
-        this._updateIgnoredCount();
-
         // Remove buttons for sites that no longer exist
         for (const url of existingUrls) {
             if (!currentUrls.has(url)) {
@@ -613,13 +610,6 @@ class UIRenderer {
         if (button) {
             button.remove();
             this.buttonElements.delete(url);
-        }
-    }
-
-    _updateIgnoredCount() {
-        const element = document.getElementById('ignored-count');
-        if (element) {
-            element.textContent = `${this.siteManager.ignoredUrls.size} ignored`;
         }
     }
 

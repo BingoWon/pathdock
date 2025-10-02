@@ -366,27 +366,6 @@ img.favicon:not([src]) {
     background-color: var(--color-bg-hover);
 }
 
-/* Ignored Sites Display - Right side */
-#ignored-sites-display {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    height: var(--topbar-element-height);
-    background-color: var(--color-bg-warning);
-    border: 1px solid var(--color-warning);
-    border-radius: var(--topbar-border-radius);
-    padding: 0 var(--topbar-padding-h);
-    font-size: var(--topbar-font-size);
-    color: var(--color-text-warning);
-    white-space: nowrap;
-    flex-shrink: 0;
-    box-sizing: border-box;
-}
-
-#ignored-count {
-    font-weight: var(--topbar-font-weight);
-}
-
 /* Utility classes */
 .hidden {
     display: none !important;
