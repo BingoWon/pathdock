@@ -783,29 +783,34 @@ class UIRenderer {
     }
 
     async _handleClick(e) {
-        const action = e.target.closest('[data-action]')?.dataset.action;
-        if (!action) {
-            // Click on button itself - open URL
-            const button = e.target.closest('.button:not(.plus-button)');
-            if (button) {
-                closeAllNewTabs();
-                chrome.tabs.create({ url: button.dataset.url });
+        // Check if clicked on an action element (pin, close, etc.)
+        const actionElement = e.target.closest('[data-action]');
+
+        if (actionElement) {
+            // Prevent event bubbling and default behavior immediately
+            e.stopPropagation();
+            e.preventDefault();
+
+            const action = actionElement.dataset.action;
+            switch (action) {
+                case 'pin':
+                    await this._handlePinClick(e);
+                    break;
+                case 'close':
+                    await this._handleCloseClick(e);
+                    break;
+                case 'add-current':
+                    await this._handleAddCurrent();
+                    break;
             }
             return;
         }
 
-        e.stopPropagation();
-
-        switch (action) {
-            case 'pin':
-                await this._handlePinClick(e);
-                break;
-            case 'close':
-                await this._handleCloseClick(e);
-                break;
-            case 'add-current':
-                await this._handleAddCurrent();
-                break;
+        // No action element clicked - open URL
+        const button = e.target.closest('.button:not(.plus-button)');
+        if (button) {
+            closeAllNewTabs();
+            chrome.tabs.create({ url: button.dataset.url });
         }
     }
 
