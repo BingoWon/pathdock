@@ -139,18 +139,10 @@ class StorageManager {
         await this.set(CONFIG.STORAGE_KEYS.FAVICONS, JSON.stringify(favicons));
     }
 
-    static async getVersion() {
-        return await this.get('version') || 0;
-    }
-
-    static async setVersion(version) {
-        await this.set('version', version);
-    }
-
     static _getDeviceId() {
         let deviceId = localStorage.getItem('deviceId');
         if (!deviceId) {
-            deviceId = `device_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            deviceId = `device_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
             localStorage.setItem('deviceId', deviceId);
         }
         return deviceId;
@@ -166,157 +158,6 @@ class StorageManager {
 
     static isLocalChange() {
         return this._localChangeFlag;
-    }
-}
-
-// ============================================================================
-// MIGRATION MANAGER - Data Migration System
-// ============================================================================
-
-class MigrationManager {
-    static CURRENT_VERSION = 1;
-
-    static async migrate() {
-        const currentVersion = await StorageManager.getVersion();
-
-        console.log(`📦 Current data version: ${currentVersion}`);
-
-        if (currentVersion < this.CURRENT_VERSION) {
-            console.log(`🔄 Starting migration from v${currentVersion} to v${this.CURRENT_VERSION}...`);
-
-            try {
-                if (currentVersion === 0) {
-                    await this._migrateV0ToV1();
-                }
-
-                await StorageManager.setVersion(this.CURRENT_VERSION);
-                console.log(`✅ Migration completed successfully!`);
-            } catch (error) {
-                console.error('❌ Migration failed:', error);
-                throw error;
-            }
-        } else {
-            console.log('✅ Data is up to date, no migration needed');
-        }
-    }
-
-    static async _migrateV0ToV1() {
-        console.log('🔄 Migrating v0 → v1: Converting old data format...');
-
-        // 1. Read old data
-        const oldPreferredRooms = await this._getOldData('preferredRooms');
-        const oldAllocatedRooms = await this._getOldData('allocatedRooms');
-        const oldIgnoredSites = await this._getOldData('ignoredSites');
-
-        console.log('📊 Old data found:', {
-            preferredRooms: oldPreferredRooms?.length || 0,
-            allocatedRooms: oldAllocatedRooms?.length || 0,
-            ignoredSites: oldIgnoredSites?.length || 0
-        });
-
-        // 2. Convert to new format
-        const sites = [];
-        const seenUrls = new Set();
-
-        // Priority 1: Migrate preferred rooms (pinned sites)
-        if (oldPreferredRooms && Array.isArray(oldPreferredRooms)) {
-            oldPreferredRooms.forEach((room, index) => {
-                if (room && room.url && Utils.isValidUrl(room.url)) {
-                    const url = Utils.normalizeUrl(room.url);
-                    if (!seenUrls.has(url)) {
-                        sites.push({
-                            url,
-                            title: room.title || new URL(url).hostname,
-                            position: index,
-                            isPinned: true,
-                            visitCount: 0
-                        });
-                        seenUrls.add(url);
-                    }
-                }
-            });
-        }
-
-        // Priority 2: Migrate allocated rooms (non-pinned sites)
-        if (oldAllocatedRooms && Array.isArray(oldAllocatedRooms)) {
-            oldAllocatedRooms.forEach((room, index) => {
-                if (room && room.url && Utils.isValidUrl(room.url)) {
-                    const url = Utils.normalizeUrl(room.url);
-                    if (!seenUrls.has(url)) {
-                        sites.push({
-                            url,
-                            title: room.title || new URL(url).hostname,
-                            position: index,
-                            isPinned: false,
-                            visitCount: 0
-                        });
-                        seenUrls.add(url);
-                    }
-                }
-            });
-        }
-
-        // 3. Migrate ignored sites
-        const ignoredUrls = new Set();
-        if (oldIgnoredSites && Array.isArray(oldIgnoredSites)) {
-            oldIgnoredSites.forEach(url => {
-                if (url && Utils.isValidUrl(url)) {
-                    ignoredUrls.add(Utils.normalizeUrl(url));
-                }
-            });
-        }
-
-        // 4. Save new data (with metadata)
-        await StorageManager.setSites(sites, true);
-        await StorageManager.setIgnoredUrls(ignoredUrls, true);
-
-        console.log('✅ Migration v0 → v1 completed:', {
-            migratedSites: sites.length,
-            pinnedSites: sites.filter(s => s.isPinned).length,
-            ignoredUrls: ignoredUrls.size
-        });
-
-        // 5. Backup old data (optional, for safety)
-        await this._backupOldData(oldPreferredRooms, oldAllocatedRooms, oldIgnoredSites);
-
-        // 6. Clean up old data (optional, uncomment if you want to remove old keys)
-        // await this._cleanupOldData();
-    }
-
-    static async _getOldData(key) {
-        try {
-            const data = await StorageManager.get(key);
-            return data ? JSON.parse(data) : null;
-        } catch (error) {
-            console.warn(`Failed to read old data for key "${key}":`, error);
-            return null;
-        }
-    }
-
-    static async _backupOldData(preferredRooms, allocatedRooms, ignoredSites) {
-        try {
-            const backup = {
-                timestamp: Date.now(),
-                preferredRooms,
-                allocatedRooms,
-                ignoredSites
-            };
-            await StorageManager.set('backup_v0', JSON.stringify(backup));
-            console.log('💾 Old data backed up successfully');
-        } catch (error) {
-            console.warn('Failed to backup old data:', error);
-        }
-    }
-
-    static async _cleanupOldData() {
-        try {
-            await StorageManager.remove('preferredRooms');
-            await StorageManager.remove('allocatedRooms');
-            await StorageManager.remove('ignoredSites');
-            console.log('🧹 Old data cleaned up');
-        } catch (error) {
-            console.warn('Failed to cleanup old data:', error);
-        }
     }
 }
 
@@ -844,7 +685,7 @@ class UIRenderer {
         button.style.opacity = '0.5';
     }
 
-    _handleDragEnd(e) {
+    _handleDragEnd() {
         if (this.draggedElement) {
             this.draggedElement.style.opacity = '1';
             this.draggedElement = null;
@@ -889,27 +730,19 @@ class App {
 
     async initialize() {
         try {
-            // Step 1: Run data migration first
             console.log('🚀 Starting application initialization...');
-            await MigrationManager.migrate();
 
-            // Step 2: Initialize site manager
+            // Step 1: Initialize site manager
             await this.siteManager.initialize();
 
-            // Step 3: Initialize UI renderer
+            // Step 2: Initialize UI renderer
             this.uiRenderer = new UIRenderer(this.siteManager);
             await this.uiRenderer.render();
 
-            // Step 4: Start sync manager
+            // Step 3: Start sync manager
             this.syncManager.startListening();
 
             console.log('✅ App initialized successfully');
-
-            // Show migration success message if applicable
-            const version = await StorageManager.getVersion();
-            if (version === 1) {
-                this._showMigrationSuccess();
-            }
         } catch (error) {
             console.error('❌ Failed to initialize app:', error);
             this._showError('Failed to load sites. Please refresh.');
@@ -932,15 +765,6 @@ class App {
             await this.uiRenderer.render();
         } catch (error) {
             console.error('❌ Failed to reload:', error);
-        }
-    }
-
-    _showMigrationSuccess() {
-        // Only show once after first migration
-        const migrationShown = localStorage.getItem('migration_v1_shown');
-        if (!migrationShown) {
-            console.log('✨ Extension updated! Your pinned sites have been preserved.');
-            localStorage.setItem('migration_v1_shown', 'true');
         }
     }
 
