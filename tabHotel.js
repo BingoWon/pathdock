@@ -179,7 +179,6 @@ class SyncManager {
         });
 
         this.isListening = true;
-        console.log('🔄 Sync manager started listening for remote changes');
     }
 
     async _handleStorageChange(changes, areaName) {
@@ -188,7 +187,6 @@ class SyncManager {
 
         // Ignore local changes (changes we made ourselves)
         if (StorageManager.isLocalChange()) {
-            console.log('📝 Local change detected, skipping sync');
             return;
         }
 
@@ -197,8 +195,6 @@ class SyncManager {
         const ignoredChanged = changes[CONFIG.STORAGE_KEYS.IGNORED];
 
         if (!sitesChanged && !ignoredChanged) return;
-
-        console.log('🌐 Remote change detected from another device');
 
         // Handle sites change
         if (sitesChanged) {
@@ -225,25 +221,19 @@ class SyncManager {
 
         // Compare timestamps to determine which data is newer
         if (newData.lastModified > currentData.lastModified) {
-            console.log('✅ Applying remote sites data (newer)');
             this.app.siteManager.sites = newData.sites || [];
             this.app.siteManager.lastModified = newData.lastModified;
             this.app.siteManager.deviceId = newData.deviceId;
             this.app.siteManager._rebuildIndex();
-        } else {
-            console.log('⏭️ Skipping remote sites data (older or same)');
         }
     }
 
     async _handleIgnoredChange(change) {
         const newValue = change.newValue ? JSON.parse(change.newValue) : [];
-        console.log('✅ Applying remote ignored URLs');
         this.app.siteManager.ignoredUrls = new Set(newValue);
     }
 
     _showSyncNotification() {
-        console.log('✨ Data synced from another device');
-
         // Optional: Show visual notification
         // Could be enhanced with a toast notification in the UI
     }
@@ -730,8 +720,6 @@ class App {
 
     async initialize() {
         try {
-            console.log('🚀 Starting application initialization...');
-
             // Step 1: Initialize site manager
             await this.siteManager.initialize();
 
@@ -741,10 +729,8 @@ class App {
 
             // Step 3: Start sync manager
             this.syncManager.startListening();
-
-            console.log('✅ App initialized successfully');
         } catch (error) {
-            console.error('❌ Failed to initialize app:', error);
+            console.error('Failed to initialize app:', error);
             this._showError('Failed to load sites. Please refresh.');
         }
     }
@@ -754,7 +740,7 @@ class App {
             await this.siteManager.updateFromHistory();
             await this.uiRenderer.render();
         } catch (error) {
-            console.error('❌ Failed to update:', error);
+            console.error('Failed to update:', error);
         }
     }
 
@@ -764,7 +750,7 @@ class App {
             await this.siteManager.reload();
             await this.uiRenderer.render();
         } catch (error) {
-            console.error('❌ Failed to reload:', error);
+            console.error('Failed to reload:', error);
         }
     }
 
@@ -792,11 +778,7 @@ function closeAllNewTabs() {
             .map(tab => tab.id);
 
         if (tabIds.length > 0) {
-            chrome.tabs.remove(tabIds, () => {
-                if (chrome.runtime.lastError) {
-                    console.log('Error closing tabs:', chrome.runtime.lastError.message);
-                }
-            });
+            chrome.tabs.remove(tabIds);
         }
     });
 }
