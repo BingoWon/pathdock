@@ -1,19 +1,19 @@
 // ============================================================================
-// MODERN SITE MANAGER - Elegant & Efficient
+// POPUP - Ultra-Fast Site Manager
 // ============================================================================
 
 const CONFIG = {
     GRID_COLS: 5,
     GRID_ROWS: 8,
-    MAX_SITES: 5 * 8, // 40 total display slots
-    MAX_PINNED_SITES: 20, // Maximum pinned sites (rest filled with history)
-    HISTORY_DAYS: 365,
-    MAX_HISTORY_ITEMS: 10000,
-    DEBOUNCE_MS: 300,
+    MAX_SITES: 40,
+    MAX_PINNED_SITES: 20,
+    CACHE_MAX_AGE: 5 * 60 * 1000, // 5 minutes
     STORAGE_KEYS: {
         SITES: 'sites',
         IGNORED: 'ignoredUrls',
-        FAVICONS: 'favIconUrls'
+        FAVICONS: 'favIconUrls',
+        CACHE: 'historyCache',
+        CACHE_TIME: 'historyCacheTime'
     }
 };
 
@@ -92,6 +92,33 @@ class StorageManager {
                     reject(chrome.runtime.lastError);
                 } else {
                     resolve();
+                }
+            });
+        });
+    }
+
+    static async getAll() {
+        // Batch read all data in one call for better performance
+        return new Promise((resolve, reject) => {
+            chrome.storage.sync.get([
+                CONFIG.STORAGE_KEYS.SITES,
+                CONFIG.STORAGE_KEYS.IGNORED,
+                CONFIG.STORAGE_KEYS.FAVICONS
+            ], (data) => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve({
+                        sites: data[CONFIG.STORAGE_KEYS.SITES]
+                            ? JSON.parse(data[CONFIG.STORAGE_KEYS.SITES])
+                            : { sites: [], lastModified: 0, deviceId: null },
+                        ignoredUrls: data[CONFIG.STORAGE_KEYS.IGNORED]
+                            ? new Set(JSON.parse(data[CONFIG.STORAGE_KEYS.IGNORED]))
+                            : new Set(),
+                        favicons: data[CONFIG.STORAGE_KEYS.FAVICONS]
+                            ? JSON.parse(data[CONFIG.STORAGE_KEYS.FAVICONS])
+                            : {}
+                    });
                 }
             });
         });
@@ -255,15 +282,17 @@ class SiteManager {
 
     async initialize() {
         try {
-            const data = await StorageManager.getSites();
-            this.sites = data.sites || [];
-            this.lastModified = data.lastModified || 0;
-            this.deviceId = data.deviceId || null;
+            // Batch load all data in one call (faster!)
+            const allData = await StorageManager.getAll();
 
-            this.ignoredUrls = await StorageManager.getIgnoredUrls();
+            this.sites = allData.sites.sites || [];
+            this.lastModified = allData.sites.lastModified || 0;
+            this.deviceId = allData.sites.deviceId || null;
+            this.ignoredUrls = allData.ignoredUrls;
             this._rebuildIndex();
 
-            await this.updateFromHistory();
+            // Load history cache from local storage (fast!)
+            await this._loadHistoryCache();
         } catch (error) {
             console.error('Failed to initialize:', error);
             this.sites = [];
@@ -282,68 +311,54 @@ class SiteManager {
         this._rebuildIndex();
     }
 
-    async updateFromHistory() {
-        const historyItems = await this._fetchHistory();
-        const mergedSites = this._mergeHistoryWithSites(historyItems);
-        this.sites = mergedSites;
-        this._rebuildIndex();
-        await this.save();
-    }
+    async _loadHistoryCache() {
+        try {
+            // Read from local storage (much faster than sync)
+            const result = await chrome.storage.local.get([
+                CONFIG.STORAGE_KEYS.CACHE,
+                CONFIG.STORAGE_KEYS.CACHE_TIME
+            ]);
 
-    async _fetchHistory() {
-        const startTime = Date.now() - (CONFIG.HISTORY_DAYS * 24 * 60 * 60 * 1000);
-        return new Promise((resolve) => {
-            chrome.history.search({
-                text: '',
-                startTime,
-                maxResults: CONFIG.MAX_HISTORY_ITEMS
-            }, resolve);
-        });
-    }
+            const cacheTime = result[CONFIG.STORAGE_KEYS.CACHE_TIME] || 0;
+            const cacheAge = Date.now() - cacheTime;
 
-    _mergeHistoryWithSites(historyItems) {
-        // Build map of history items
-        const historyMap = new Map();
-        historyItems.forEach(item => {
-            if (!Utils.isValidUrl(item.url)) return;
-            const url = Utils.normalizeUrl(item.url);
-            if (this.ignoredUrls.has(url)) return;
-
-            if (historyMap.has(url)) {
-                historyMap.get(url).visitCount += item.visitCount;
+            // Use cache if it's fresh enough
+            if (cacheAge < CONFIG.CACHE_MAX_AGE && result[CONFIG.STORAGE_KEYS.CACHE]) {
+                const historyData = JSON.parse(result[CONFIG.STORAGE_KEYS.CACHE]);
+                this._mergeHistoryWithSites(historyData);
             } else {
-                historyMap.set(url, {
-                    url,
-                    title: item.title || new URL(url).hostname,
-                    visitCount: item.visitCount
-                });
+                // Cache is stale, trigger background update
+                chrome.runtime.sendMessage({ action: "updateHistoryCache" });
             }
-        });
+        } catch (error) {
+            console.error('Failed to load history cache:', error);
+        }
+    }
 
-        // Merge with existing pinned sites
+    _mergeHistoryWithSites(historyData) {
+        // Get pinned sites
         const pinnedSites = this.sites.filter(s => s.isPinned);
         const pinnedUrls = new Set(pinnedSites.map(s => s.url));
 
-        // Calculate remaining slots for unpinned sites
+        // Calculate remaining slots
         const remainingSlots = CONFIG.MAX_SITES - pinnedSites.length;
 
-        // Get top unpinned sites from history (only take what we need)
-        const unpinnedHistory = Array.from(historyMap.values())
+        // Get top unpinned sites from cache
+        const unpinnedHistory = historyData
             .filter(item => !pinnedUrls.has(item.url))
-            .sort((a, b) => b.visitCount - a.visitCount)
-            .slice(0, remainingSlots); // Only take remaining slots
+            .slice(0, remainingSlots);
 
         // Allocate positions
         const result = new Array(CONFIG.MAX_SITES).fill(null);
 
-        // Place pinned sites first (preserve their positions)
+        // Place pinned sites first
         pinnedSites.forEach(site => {
             if (site.position >= 0 && site.position < CONFIG.MAX_SITES) {
                 result[site.position] = { ...site };
             }
         });
 
-        // Fill empty positions with top history items
+        // Fill empty positions with history items
         let historyIndex = 0;
         for (let i = 0; i < CONFIG.MAX_SITES && historyIndex < unpinnedHistory.length; i++) {
             if (!result[i]) {
@@ -353,12 +368,20 @@ class SiteManager {
                     title: item.title,
                     position: i,
                     isPinned: false,
-                    visitCount: item.visitCount
+                    visitCount: item.visitCount || 0
                 };
             }
         }
 
-        return result.filter(Boolean);
+        this.sites = result.filter(Boolean);
+        this._rebuildIndex();
+    }
+
+    async updateFromHistory() {
+        // Trigger background update and reload cache
+        await chrome.runtime.sendMessage({ action: "updateHistoryCache" });
+        await this._loadHistoryCache();
+        await this.save();
     }
 
     _rebuildIndex() {
@@ -614,13 +637,26 @@ class UIRenderer {
     }
 
     _reorderButtons(sites) {
-        const fragment = document.createDocumentFragment();
-        sites.forEach(site => {
-            const button = this.buttonElements.get(site.url);
-            if (button) fragment.appendChild(button);
-        });
+        // Optimized: Only reorder if necessary, avoid clearing container
+        const currentOrder = Array.from(this.container.children);
+        const targetOrder = sites.map(site => this.buttonElements.get(site.url)).filter(Boolean);
 
-        // Clear and re-append in correct order
+        // Check if reordering is needed
+        let needsReorder = false;
+        for (let i = 0; i < targetOrder.length; i++) {
+            if (currentOrder[i] !== targetOrder[i]) {
+                needsReorder = true;
+                break;
+            }
+        }
+
+        if (!needsReorder) return;
+
+        // Use fragment for efficient reordering
+        const fragment = document.createDocumentFragment();
+        targetOrder.forEach(button => fragment.appendChild(button));
+
+        // Replace all at once (single reflow)
         this.container.innerHTML = '';
         this.container.appendChild(fragment);
     }
@@ -819,6 +855,11 @@ function closeAllNewTabs() {
 window.app = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
+    const startTime = performance.now();
+
     window.app = new App();
     await window.app.initialize();
+
+    const endTime = performance.now();
+    console.log(`✨ Popup initialized in ${(endTime - startTime).toFixed(2)}ms`);
 });

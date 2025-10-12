@@ -1,25 +1,40 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     const publicIpElement = document.getElementById('public-ip');
     const copyIpBtn = document.getElementById('copy-ip-btn');
     let currentIp = '';
 
-    // Fetch public IP from api.ipify.org
+    // Fetch public IP asynchronously (non-blocking)
     const fetchPublicIP = async () => {
         try {
-            publicIpElement.textContent = 'Loading...';
-            const response = await fetch('https://api.ipify.org?format=json');
+            publicIpElement.textContent = '...';
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            // Use cached IP if available
+            const cached = localStorage.getItem('cachedIP');
+            const cacheTime = localStorage.getItem('cachedIPTime');
+            const cacheAge = Date.now() - (parseInt(cacheTime) || 0);
+
+            // Show cached IP immediately if fresh (< 5 minutes)
+            if (cached && cacheAge < 5 * 60 * 1000) {
+                currentIp = cached;
+                publicIpElement.textContent = currentIp;
             }
+
+            // Fetch fresh IP in background
+            const response = await fetch('https://api.ipify.org?format=json');
+            if (!response.ok) throw new Error('Network error');
 
             const data = await response.json();
             currentIp = data.ip;
             publicIpElement.textContent = currentIp;
+
+            // Cache the result
+            localStorage.setItem('cachedIP', currentIp);
+            localStorage.setItem('cachedIPTime', Date.now().toString());
         } catch (error) {
             console.error('Error fetching IP:', error);
-            publicIpElement.textContent = 'Error';
-            currentIp = '';
+            if (!currentIp) {
+                publicIpElement.textContent = 'N/A';
+            }
         }
     };
 
@@ -72,6 +87,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Initial IP fetch
-    await fetchPublicIP();
+    // Initial IP fetch (non-blocking)
+    fetchPublicIP();
 });

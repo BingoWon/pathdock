@@ -22,7 +22,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event listener for the search button click
     searchButton.addEventListener('click', handleSearch);
-
-    // Automatically focus the search input when the popup loads
-    searchInput.focus();
 });
