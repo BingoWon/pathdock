@@ -1,0 +1,15 @@
+# Firefox build directory (auto-generated)
+firefox/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Backup files
+*.bak
+*~
+manifest.chrome.json
+

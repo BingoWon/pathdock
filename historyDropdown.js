@@ -1,3 +1,5 @@
+// Note: browserAPI is defined in browserAPI.js (loaded first in popup.html)
+
 document.addEventListener('DOMContentLoaded', () => {
     const historyIcon = document.getElementById('history-icon');
     const historyDropdown = document.getElementById('history-dropdown');
@@ -15,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadHistory() {
         try {
-            const data = await chrome.storage.sync.get('ignoredUrls');
+            const data = await browserAPI.storage.sync.get('ignoredUrls');
             const ignoredUrls = data.ignoredUrls ? JSON.parse(data.ignoredUrls) : [];
 
             historyList.innerHTML = '';
@@ -59,10 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 await window.app.update();
             } else {
                 // Fallback to direct storage manipulation
-                const data = await chrome.storage.sync.get('ignoredUrls');
+                const data = await browserAPI.storage.sync.get('ignoredUrls');
                 let ignoredUrls = data.ignoredUrls ? JSON.parse(data.ignoredUrls) : [];
                 ignoredUrls = ignoredUrls.filter(u => u !== url);
-                await chrome.storage.sync.set({ ignoredUrls: JSON.stringify(ignoredUrls) });
+                await browserAPI.storage.sync.set({ ignoredUrls: JSON.stringify(ignoredUrls) });
             }
             loadHistory();
         } catch (error) {

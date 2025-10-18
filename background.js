@@ -2,6 +2,9 @@
 // BACKGROUND SERVICE WORKER - Performance Optimized
 // ============================================================================
 
+// Browser API compatibility layer for Edge and Firefox
+const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+
 const CONFIG = {
     HISTORY_DAYS: 30,           // Reduced from 365 to 30 days
     MAX_HISTORY_ITEMS: 1000,    // Reduced from 10000 to 1000
@@ -34,7 +37,7 @@ class HistoryManager {
             const historyItems = await this._fetchHistory();
             const processedData = await this._processHistory(historyItems);
 
-            await chrome.storage.local.set({
+            await browserAPI.storage.local.set({
                 [CONFIG.STORAGE_KEYS.CACHE]: JSON.stringify(processedData),
                 [CONFIG.STORAGE_KEYS.CACHE_TIME]: Date.now()
             });
@@ -51,7 +54,7 @@ class HistoryManager {
     async _fetchHistory() {
         const startTime = Date.now() - (CONFIG.HISTORY_DAYS * 24 * 60 * 60 * 1000);
         return new Promise((resolve) => {
-            chrome.history.search({
+            browserAPI.history.search({
                 text: '',
                 startTime,
                 maxResults: CONFIG.MAX_HISTORY_ITEMS
@@ -60,7 +63,7 @@ class HistoryManager {
     }
 
     async _processHistory(historyItems) {
-        const { ignoredUrls } = await chrome.storage.sync.get(CONFIG.STORAGE_KEYS.IGNORED);
+        const { ignoredUrls } = await browserAPI.storage.sync.get(CONFIG.STORAGE_KEYS.IGNORED);
         const ignored = ignoredUrls ? new Set(JSON.parse(ignoredUrls)) : new Set();
 
         const historyMap = new Map();
@@ -107,11 +110,11 @@ class HistoryManager {
 // FAVICON MANAGER - Capture Real Favicons
 // ============================================================================
 
-chrome.tabs.onUpdated.addListener(async (_, changeInfo, tab) => {
+browserAPI.tabs.onUpdated.addListener(async (_, changeInfo, tab) => {
     if (changeInfo.status !== 'complete' || !tab.url) return;
 
     try {
-        const { sites, favIconUrls } = await chrome.storage.sync.get([
+        const { sites, favIconUrls } = await browserAPI.storage.sync.get([
             CONFIG.STORAGE_KEYS.SITES,
             CONFIG.STORAGE_KEYS.FAVICONS
         ]);
@@ -129,7 +132,7 @@ chrome.tabs.onUpdated.addListener(async (_, changeInfo, tab) => {
         if (foundSite && tab.favIconUrl) {
             favicons[hostnameWithPort] = tab.favIconUrl;
 
-            await chrome.storage.sync.set({
+            await browserAPI.storage.sync.set({
                 [CONFIG.STORAGE_KEYS.FAVICONS]: JSON.stringify(favicons)
             });
         }
@@ -142,9 +145,9 @@ chrome.tabs.onUpdated.addListener(async (_, changeInfo, tab) => {
 // MESSAGE HANDLERS
 // ============================================================================
 
-chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+browserAPI.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     if (request.action === "openNewTab") {
-        chrome.tabs.create({ url: request.url });
+        browserAPI.tabs.create({ url: request.url });
     } else if (request.action === "updateHistoryCache") {
         historyManager.updateCache().then(() => {
             sendResponse({ success: true });
@@ -157,11 +160,11 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 // KEYBOARD SHORTCUTS
 // ============================================================================
 
-chrome.commands.onCommand.addListener((command) => {
+browserAPI.commands.onCommand.addListener((command) => {
     if (command === "quick_search" || command === "direct_search") {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             if (tabs.length > 0) {
-                chrome.tabs.sendMessage(tabs[0].id, {
+                browserAPI.tabs.sendMessage(tabs[0].id, {
                     action: "triggerSearch",
                     command: command
                 });

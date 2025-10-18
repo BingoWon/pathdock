@@ -1,6 +1,7 @@
 // ============================================================================
 // POPUP - Ultra-Fast Site Manager
 // ============================================================================
+// Note: browserAPI is defined in browserAPI.js (loaded first in popup.html)
 
 const CONFIG = {
     GRID_COLS: 5,
@@ -63,9 +64,9 @@ class StorageManager {
 
     static async get(key) {
         return new Promise((resolve, reject) => {
-            chrome.storage.sync.get(key, (data) => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
+            browserAPI.storage.sync.get(key, (data) => {
+                if (browserAPI.runtime.lastError) {
+                    reject(browserAPI.runtime.lastError);
                 } else {
                     resolve(data[key]);
                 }
@@ -75,9 +76,9 @@ class StorageManager {
 
     static async set(key, value) {
         return new Promise((resolve, reject) => {
-            chrome.storage.sync.set({ [key]: value }, () => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
+            browserAPI.storage.sync.set({ [key]: value }, () => {
+                if (browserAPI.runtime.lastError) {
+                    reject(browserAPI.runtime.lastError);
                 } else {
                     resolve();
                 }
@@ -87,9 +88,9 @@ class StorageManager {
 
     static async remove(key) {
         return new Promise((resolve, reject) => {
-            chrome.storage.sync.remove(key, () => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
+            browserAPI.storage.sync.remove(key, () => {
+                if (browserAPI.runtime.lastError) {
+                    reject(browserAPI.runtime.lastError);
                 } else {
                     resolve();
                 }
@@ -100,13 +101,13 @@ class StorageManager {
     static async getAll() {
         // Batch read all data in one call for better performance
         return new Promise((resolve, reject) => {
-            chrome.storage.sync.get([
+            browserAPI.storage.sync.get([
                 CONFIG.STORAGE_KEYS.SITES,
                 CONFIG.STORAGE_KEYS.IGNORED,
                 CONFIG.STORAGE_KEYS.FAVICONS
             ], (data) => {
-                if (chrome.runtime.lastError) {
-                    reject(chrome.runtime.lastError);
+                if (browserAPI.runtime.lastError) {
+                    reject(browserAPI.runtime.lastError);
                 } else {
                     resolve({
                         sites: data[CONFIG.STORAGE_KEYS.SITES]
@@ -202,7 +203,7 @@ class SyncManager {
     startListening() {
         if (this.isListening) return;
 
-        chrome.storage.onChanged.addListener((changes, areaName) => {
+        browserAPI.storage.onChanged.addListener((changes, areaName) => {
             this._handleStorageChange(changes, areaName);
         });
 
@@ -314,7 +315,7 @@ class SiteManager {
     async _loadHistoryCache() {
         try {
             // Read from local storage (much faster than sync)
-            const result = await chrome.storage.local.get([
+            const result = await browserAPI.storage.local.get([
                 CONFIG.STORAGE_KEYS.CACHE,
                 CONFIG.STORAGE_KEYS.CACHE_TIME
             ]);
@@ -328,7 +329,7 @@ class SiteManager {
                 this._mergeHistoryWithSites(historyData);
             } else {
                 // Cache is stale, trigger background update
-                chrome.runtime.sendMessage({ action: "updateHistoryCache" });
+                browserAPI.runtime.sendMessage({ action: "updateHistoryCache" });
             }
         } catch (error) {
             console.error('Failed to load history cache:', error);
@@ -379,7 +380,7 @@ class SiteManager {
 
     async updateFromHistory() {
         // Trigger background update and reload cache
-        await chrome.runtime.sendMessage({ action: "updateHistoryCache" });
+        await browserAPI.runtime.sendMessage({ action: "updateHistoryCache" });
         await this._loadHistoryCache();
         await this.save();
     }
@@ -442,7 +443,7 @@ class SiteManager {
 
     async addCurrentTab() {
         const tabs = await new Promise(resolve => {
-            chrome.tabs.query({ active: true, currentWindow: true }, resolve);
+            browserAPI.tabs.query({ active: true, currentWindow: true }, resolve);
         });
 
         const tab = tabs[0];
@@ -703,7 +704,7 @@ class UIRenderer {
         const button = e.target.closest('.button');
         if (button) {
             closeAllNewTabs();
-            chrome.tabs.create({ url: button.dataset.url });
+            browserAPI.tabs.create({ url: button.dataset.url });
         }
     }
 
@@ -830,12 +831,12 @@ class App {
 // ============================================================================
 
 function closeAllNewTabs() {
-    chrome.tabs.query({}, (tabs) => {
+    browserAPI.tabs.query({}, (tabs) => {
         const newTabUrls = [
             'chrome://newtab/',
             'edge://newtab/',
-            'chrome-search://local-ntp/local-ntp.html',
-            'about:newtab'
+            'about:newtab',
+            'chrome-search://local-ntp/local-ntp.html'
         ];
 
         const tabIds = tabs
@@ -843,7 +844,7 @@ function closeAllNewTabs() {
             .map(tab => tab.id);
 
         if (tabIds.length > 0) {
-            chrome.tabs.remove(tabIds);
+            browserAPI.tabs.remove(tabIds);
         }
     });
 }

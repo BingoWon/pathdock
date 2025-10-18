@@ -1,3 +1,6 @@
+// Browser API compatibility layer for Edge and Firefox
+const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+
 // 监听选中文本的快捷键操作
 document.addEventListener('keydown', function(e) {
     // Windows/Linux: Alt + S
@@ -37,38 +40,38 @@ document.addEventListener('keydown', function(e) {
                 if (!url.startsWith('http')) {
                     url = 'https://' + url;
                 }
-                chrome.runtime.sendMessage({ action: "openNewTab", url: url });
+                browserAPI.runtime.sendMessage({ action: "openNewTab", url: url });
             } else {
                 // 如果是直接搜索快捷键或者文本不是URL，使用DuckDuckGo搜索
                 const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(cleanedText)}`;
-                chrome.runtime.sendMessage({ action: "openNewTab", url: searchUrl });
+                browserAPI.runtime.sendMessage({ action: "openNewTab", url: searchUrl });
             }
         }
     }
 });
 
 // 监听来自background.js的消息
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+browserAPI.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === "triggerSearch") {
         // 获取选中文本并进行彻底清洗
         const rawText = window.getSelection().toString();
         const cleanedText = cleanText(rawText);
-        
+
         if (cleanedText) {
             // 将清洗后的文本复制到剪贴板
             copyToClipboard(cleanedText);
-            
+
             if (request.command === "quick_search" && isValidUrl(cleanedText)) {
                 // 如果是普通搜索命令且选中的文本是URL，直接打开
                 let url = cleanedText;
                 if (!url.startsWith('http')) {
                     url = 'https://' + url;
                 }
-                chrome.runtime.sendMessage({ action: "openNewTab", url: url });
+                browserAPI.runtime.sendMessage({ action: "openNewTab", url: url });
             } else {
                 // 如果是直接搜索命令或者文本不是URL，使用DuckDuckGo搜索
                 const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(cleanedText)}`;
-                chrome.runtime.sendMessage({ action: "openNewTab", url: searchUrl });
+                browserAPI.runtime.sendMessage({ action: "openNewTab", url: searchUrl });
             }
         }
     }
