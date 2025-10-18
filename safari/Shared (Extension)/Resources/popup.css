@@ -34,14 +34,13 @@
     --topbar-font-weight: 600;
 
     /* Grid */
-    --grid-cols: 5;
-    --grid-rows: 8;
+    --grid-cols: 6;
     --grid-gap: 8px;
 }
 
 html {
     width: 800px;
-    height: 600px;
+    min-height: 76px;
     overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'XHei Intel', sans-serif;
 }
@@ -58,12 +57,10 @@ body {
 #buttons-container {
     display: grid;
     grid-template-columns: repeat(var(--grid-cols), 1fr);
-    grid-template-rows: repeat(var(--grid-rows), 1fr);
+    grid-auto-rows: 70px;
     gap: var(--grid-gap);
     padding: var(--grid-gap);
     box-sizing: border-box;
-    flex: 1;
-    overflow: hidden;
 }
 
 /* Site buttons in grid */
@@ -445,4 +442,92 @@ img.favicon:not([src]) {
 
 #history-list li button:hover {
     background-color: rgba(228, 30, 63, 0.1);
+}
+
+/* ============================================================================
+   SAFARI VERSION - Site Button Styles
+   ============================================================================ */
+
+.site-button {
+    position: relative;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    height: 70px;
+}
+
+.site-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.site-button.dragging {
+    opacity: 0.5;
+}
+
+.site-button .favicon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+.site-button .site-info {
+    width: 100%;
+    text-align: center;
+}
+
+.site-button .site-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.site-button .site-url {
+    font-size: 10px;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.site-button .close-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--color-text-secondary);
+    opacity: 0;
+    transition: opacity var(--transition-fast), color var(--transition-fast);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.site-button:hover .close-btn {
+    opacity: 0.6;
+}
+
+.site-button .close-btn:hover {
+    opacity: 1 !important;
+    color: var(--color-primary);
 }
