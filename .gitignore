@@ -3,9 +3,9 @@ firefox/
 
 # Safari Xcode build artifacts
 safari/Bin Extension/DerivedData/
-safari/Bin Extension/*.xcworkspace/xcuserdata/
-safari/Bin Extension/*.xcodeproj/xcuserdata/
-safari/Bin Extension/*.xcodeproj/project.xcworkspace/xcuserdata/
+safari/*.xcworkspace/xcuserdata/
+safari/*.xcodeproj/xcuserdata/
+safari/*.xcodeproj/project.xcworkspace/xcuserdata/
 
 # macOS
 .DS_Store
