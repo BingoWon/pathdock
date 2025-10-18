@@ -47,34 +47,7 @@ browserAPI.tabs.onUpdated.addListener(async (_, changeInfo, tab) => {
 });
 
 // ============================================================================
-// MESSAGE HANDLERS
-// ============================================================================
-
-browserAPI.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-    if (request.action === "openNewTab") {
-        browserAPI.tabs.create({ url: request.url });
-    }
-});
-
-// ============================================================================
-// KEYBOARD SHORTCUTS
-// ============================================================================
-
-browserAPI.commands.onCommand.addListener((command) => {
-    if (command === "quick_search" || command === "direct_search") {
-        browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (tabs.length > 0) {
-                browserAPI.tabs.sendMessage(tabs[0].id, {
-                    action: "triggerSearch",
-                    command: command
-                });
-            }
-        });
-    }
-});
-
-// ============================================================================
 // INITIALIZATION
 // ============================================================================
 
-console.log('Safari Extension: Background script loaded (simplified version)');
+console.log('Safari Extension: Background script loaded');

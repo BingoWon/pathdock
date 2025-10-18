@@ -1,8 +1,7 @@
 // ============================================================================
 // SITE MANAGER - Safari Version (Simplified)
 // ============================================================================
-
-const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+// Note: browserAPI is defined in browserAPI.js (loaded before this file)
 
 const CONFIG = {
     MAX_SITES: 48,
@@ -156,7 +155,7 @@ class UIManager {
 
     updateHeight(siteCount) {
         const rows = Math.ceil(siteCount / CONFIG.GRID_COLS);
-        const topBarHeight = 60;
+        const topBarHeight = 50;  // Reduced from 60 to 50
         const rowHeight = 70;
         const rowGap = 8;
         const padding = 16;
@@ -175,12 +174,10 @@ class UIManager {
         const favicon = this.siteList.getFavicon(site.url);
 
         button.innerHTML = `
+            <span class="close-btn" title="Remove">×</span>
             <img src="${favicon}" alt="" class="favicon" onerror="this.src='https://www.google.com/s2/favicons?domain=${new URL(site.url).hostname}&sz=32'">
-            <div class="site-info">
-                <div class="site-title">${this.escapeHtml(site.title)}</div>
-                <div class="site-url">${this.escapeHtml(this.shortenUrl(site.url))}</div>
-            </div>
-            <button class="close-btn" title="Remove">×</button>
+            <div class="site-title">${this.escapeHtml(site.title)}</div>
+            <div class="site-url">${this.escapeHtml(this.shortenUrl(site.url))}</div>
         `;
 
         // Event listeners
