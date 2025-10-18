@@ -33,6 +33,7 @@ rsync -av \
     --exclude='manifest.chrome.json' \
     --exclude='manifest.firefox.json' \
     --exclude='firefox/' \
+    --exclude='safari/' \
     --exclude='build-firefox.sh' \
     --exclude='README.md' \
     "$SCRIPT_DIR/" "$FIREFOX_DIR/"
