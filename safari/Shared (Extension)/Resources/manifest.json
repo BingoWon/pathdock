@@ -12,7 +12,8 @@
     "permissions": [
         "tabs",
         "activeTab",
-        "storage"
+        "storage",
+        "scripting"
     ],
     "host_permissions": [
         "https://api.ipify.org/*"
@@ -48,13 +49,6 @@
             "description": "Direct search with DuckDuckGo"
         }
     },
-    "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "js": ["quickSearch.js"],
-            "run_at": "document_end"
-        }
-    ],
     "browser_specific_settings": {
         "gecko": {
             "id": "bin-extension@example.com",

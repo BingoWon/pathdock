@@ -57,19 +57,91 @@ browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 // ============================================================================
+// TEXT PROCESSING UTILITIES
+// ============================================================================
+
+function cleanText(text) {
+    if (!text) return '';
+
+    let cleaned = text.trim();
+    cleaned = cleaned.replace(/^["'`]+|["'`]+$/g, '');
+    cleaned = cleaned.replace(/^\(+|\)+$/g, '');
+    cleaned = cleaned.replace(/^\[+|\]+$/g, '');
+    cleaned = cleaned.replace(/^\{+|\}+$/g, '');
+    cleaned = cleaned.replace(/^[.,;:!?]+|[.,;:!?]+$/g, '');
+    cleaned = cleaned.replace(/\s+/g, ' ');
+
+    return cleaned;
+}
+
+function isValidUrl(text) {
+    if (text.includes(' ')) return false;
+
+    try {
+        const url = new URL(text);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (e) {
+        // Not a complete URL, continue checking
+    }
+
+    if (!text.includes('.')) return false;
+
+    const commonTLDs = [
+        '.com', '.org', '.net', '.edu', '.gov', '.io', '.co',
+        '.cn', '.de', '.uk', '.ru', '.jp', '.fr', '.it', '.es',
+        '.au', '.ca', '.in', '.nl', '.br', '.tv', '.info', '.biz',
+        '.me', '.app', '.dev', '.ai', '.cloud', '.tech', '.online'
+    ];
+
+    const hasTLD = commonTLDs.some(tld => text.toLowerCase().endsWith(tld));
+
+    if (!hasTLD) {
+        const ipPattern = /^(\d{1,3}\.){3}\d{1,3}(:\d+)?(\/.*)?$/;
+        if (!ipPattern.test(text)) return false;
+    }
+
+    const invalidChars = ['<', '>', '"', '`', '{', '}', '|', '\\', '^', '[', ']'];
+    if (invalidChars.some(char => text.includes(char))) return false;
+
+    try {
+        const testUrl = new URL('https://' + text);
+        return testUrl.hostname.includes('.');
+    } catch (e) {
+        return false;
+    }
+}
+
+// ============================================================================
 // KEYBOARD SHORTCUTS
 // ============================================================================
 
-browserAPI.commands.onCommand.addListener((command) => {
+browserAPI.commands.onCommand.addListener(async (command) => {
     if (command === "quick_search" || command === "direct_search") {
-        browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (tabs[0]) {
-                browserAPI.tabs.sendMessage(tabs[0].id, {
-                    action: "triggerSearch",
-                    command: command
-                });
+        const tabs = await browserAPI.tabs.query({ active: true, currentWindow: true });
+        if (!tabs[0]) return;
+
+        try {
+            const results = await browserAPI.scripting.executeScript({
+                target: { tabId: tabs[0].id },
+                func: () => window.getSelection().toString()
+            });
+
+            const rawText = results[0]?.result || '';
+            const cleanedText = cleanText(rawText);
+
+            if (!cleanedText) return;
+
+            let url;
+            if (command === "quick_search" && isValidUrl(cleanedText)) {
+                url = cleanedText.startsWith('http') ? cleanedText : 'https://' + cleanedText;
+            } else {
+                url = `https://duckduckgo.com/?q=${encodeURIComponent(cleanedText)}`;
             }
-        });
+
+            await browserAPI.tabs.create({ url });
+        } catch (error) {
+            console.error('Error executing search:', error);
+        }
     }
 });
 
