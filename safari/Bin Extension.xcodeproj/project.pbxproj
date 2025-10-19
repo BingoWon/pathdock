@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D85426687C74A94AD9A3ED5 /* siteManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 26C601628EA14539AAEBFB90 /* siteManager.js */; };
+		230D8E67CCF74080BFF24CF1 /* utils.js in Resources */ = {isa = PBXBuildFile; fileRef = F2E48F6A67354E719BA83499 /* utils.js */; };
+		B27E06795B784BB68AE998E2 /* utils.js in Resources */ = {isa = PBXBuildFile; fileRef = F2E48F6A67354E719BA83499 /* utils.js */; };
+		B97BD8DE2FF2B4146B4AE021 /* siteManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 26C601628EA14539AAEBFB90 /* siteManager.js */; };
 		D7B040502EA3AF3200D6B74D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0404F2EA3AF3200D6B74D /* AppDelegate.swift */; };
 		D7B040522EA3AF3200D6B74D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B040512EA3AF3200D6B74D /* SceneDelegate.swift */; };
 		D7B040552EA3AF3200D6B74D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7B040532EA3AF3200D6B74D /* LaunchScreen.storyboard */; };
@@ -34,20 +38,15 @@
 		D7B040AB2EA3AF3300D6B74D /* ipDisplay.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409C2EA3AF3300D6B74D /* ipDisplay.js */; };
 		D7B040AC2EA3AF3300D6B74D /* images in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409D2EA3AF3300D6B74D /* images */; };
 		D7B040AD2EA3AF3300D6B74D /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409E2EA3AF3300D6B74D /* popup.html */; };
-		B97BD8DE2FF2B4146B4AE021 /* siteManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 26C601628EA14539AAEBFB90 /* siteManager.js */; };
 		D7B040B02EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */; };
-		B27E06795B784BB68AE998E2 /* utils.js in Resources */ = {isa = PBXBuildFile; fileRef = F2E48F6A67354E719BA83499 /* utils.js */; };
 		D7B040B22EA3AF3300D6B74D /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A32EA3AF3300D6B74D /* manifest.json */; };
 		D7B040B32EA3AF3300D6B74D /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A42EA3AF3300D6B74D /* popup.css */; };
 		D7B040B42EA3AF3300D6B74D /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A52EA3AF3300D6B74D /* _locales */; };
 		D7B040B82EA3AF3300D6B74D /* browserAPI.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409A2EA3AF3300D6B74D /* browserAPI.js */; };
 		D7B040B92EA3AF3300D6B74D /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409B2EA3AF3300D6B74D /* background.js */; };
-		D7B040BA2EA3AF3300D6B74D /* ipDisplay.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409C2EA3AF3300D6B74D /* ipDisplay.js */; };
 		D7B040BB2EA3AF3300D6B74D /* images in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409D2EA3AF3300D6B74D /* images */; };
 		D7B040BC2EA3AF3300D6B74D /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409E2EA3AF3300D6B74D /* popup.html */; };
-		1D85426687C74A94AD9A3ED5 /* siteManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 26C601628EA14539AAEBFB90 /* siteManager.js */; };
 		D7B040BF2EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */; };
-		230D8E67CCF74080BFF24CF1 /* utils.js in Resources */ = {isa = PBXBuildFile; fileRef = F2E48F6A67354E719BA83499 /* utils.js */; };
 		D7B040C12EA3AF3300D6B74D /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A32EA3AF3300D6B74D /* manifest.json */; };
 		D7B040C22EA3AF3300D6B74D /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A42EA3AF3300D6B74D /* popup.css */; };
 		D7B040C32EA3AF3300D6B74D /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A52EA3AF3300D6B74D /* _locales */; };
@@ -96,6 +95,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		26C601628EA14539AAEBFB90 /* siteManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = siteManager.js; path = Resources/siteManager.js; sourceTree = "<group>"; };
 		D7B040402EA3AF3100D6B74D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
 		D7B040412EA3AF3100D6B74D /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		D7B040422EA3AF3100D6B74D /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
@@ -122,12 +122,11 @@
 		D7B0409C2EA3AF3300D6B74D /* ipDisplay.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = ipDisplay.js; path = Resources/ipDisplay.js; sourceTree = "<group>"; };
 		D7B0409D2EA3AF3300D6B74D /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = Resources/images; sourceTree = "<group>"; };
 		D7B0409E2EA3AF3300D6B74D /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = Resources/popup.html; sourceTree = "<group>"; };
-		26C601628EA14539AAEBFB90 /* siteManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = siteManager.js; path = Resources/siteManager.js; sourceTree = "<group>"; };
 		D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = youtubeSearchBar.js; path = Resources/youtubeSearchBar.js; sourceTree = "<group>"; };
-		F2E48F6A67354E719BA83499 /* utils.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = utils.js; path = Resources/utils.js; sourceTree = "<group>"; };
 		D7B040A32EA3AF3300D6B74D /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = Resources/manifest.json; sourceTree = "<group>"; };
 		D7B040A42EA3AF3300D6B74D /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = Resources/popup.css; sourceTree = "<group>"; };
 		D7B040A52EA3AF3300D6B74D /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; name = _locales; path = Resources/_locales; sourceTree = "<group>"; };
+		F2E48F6A67354E719BA83499 /* utils.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = utils.js; path = Resources/utils.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,27 +275,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D7B0404B2EA3AF3200D6B74D /* Bin Extension (iOS) */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D7B0408E2EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "Bin Extension (iOS)" */;
-			buildPhases = (
-				D7B040482EA3AF3200D6B74D /* Sources */,
-				D7B040492EA3AF3200D6B74D /* Frameworks */,
-				D7B0404A2EA3AF3200D6B74D /* Resources */,
-				D7B0408D2EA3AF3200D6B74D /* Embed Foundation Extensions */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D7B0406D2EA3AF3200D6B74D /* PBXTargetDependency */,
-			);
-			name = "Bin Extension (iOS)";
-			packageProductDependencies = (
-			);
-			productName = "Bin Extension (iOS)";
-			productReference = D7B0404C2EA3AF3200D6B74D /* Bin Extension.app */;
-			productType = "com.apple.product-type.application";
-		};
 		D7B0405D2EA3AF3200D6B74D /* Bin Extension (macOS) */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D7B040952EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "Bin Extension (macOS)" */;
@@ -317,25 +295,6 @@
 			productName = "Bin Extension (macOS)";
 			productReference = D7B0405E2EA3AF3200D6B74D /* Bin Extension.app */;
 			productType = "com.apple.product-type.application";
-		};
-		D7B040692EA3AF3200D6B74D /* Bin Extension Extension (iOS) */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D7B0408A2EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "Bin Extension Extension (iOS)" */;
-			buildPhases = (
-				D7B040662EA3AF3200D6B74D /* Sources */,
-				D7B040672EA3AF3200D6B74D /* Frameworks */,
-				D7B040682EA3AF3200D6B74D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Bin Extension Extension (iOS)";
-			packageProductDependencies = (
-			);
-			productName = "Bin Extension Extension (iOS)";
-			productReference = D7B0406A2EA3AF3200D6B74D /* Bin Extension Extension.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 		D7B040732EA3AF3200D6B74D /* Bin Extension Extension (macOS) */ = {
 			isa = PBXNativeTarget;
@@ -394,9 +353,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D7B0404B2EA3AF3200D6B74D /* Bin Extension (iOS) */,
 				D7B0405D2EA3AF3200D6B74D /* Bin Extension (macOS) */,
-				D7B040692EA3AF3200D6B74D /* Bin Extension Extension (iOS) */,
 				D7B040732EA3AF3200D6B74D /* Bin Extension Extension (macOS) */,
 			);
 		};
@@ -742,6 +699,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5C4299VVGU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension";
@@ -782,6 +740,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5C4299VVGU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "iOS (App)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension";
@@ -843,6 +802,7 @@
 				PRODUCT_NAME = "Bin Extension Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -878,6 +838,7 @@
 				PRODUCT_NAME = "Bin Extension Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -893,6 +854,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5C4299VVGU;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -918,6 +880,7 @@
 				PRODUCT_NAME = "Bin Extension";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -934,6 +897,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5C4299VVGU;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -959,6 +923,7 @@
 				PRODUCT_NAME = "Bin Extension";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -976,24 +941,6 @@
 			buildConfigurations = (
 				D7B040882EA3AF3200D6B74D /* Debug */,
 				D7B040892EA3AF3200D6B74D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D7B0408A2EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "Bin Extension Extension (iOS)" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D7B0408B2EA3AF3200D6B74D /* Debug */,
-				D7B0408C2EA3AF3200D6B74D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D7B0408E2EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "Bin Extension (iOS)" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D7B0408F2EA3AF3200D6B74D /* Debug */,
-				D7B040902EA3AF3200D6B74D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
