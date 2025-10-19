@@ -36,6 +36,7 @@
 		D7B040AD2EA3AF3300D6B74D /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409E2EA3AF3300D6B74D /* popup.html */; };
 		B97BD8DE2FF2B4146B4AE021 /* siteManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 26C601628EA14539AAEBFB90 /* siteManager.js */; };
 		D7B040B02EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */; };
+		D7B040B12EA3AF3300D6B74D /* quickSearch.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A22EA3AF3300D6B74D /* quickSearch.js */; };
 		D7B040B22EA3AF3300D6B74D /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A32EA3AF3300D6B74D /* manifest.json */; };
 		D7B040B32EA3AF3300D6B74D /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A42EA3AF3300D6B74D /* popup.css */; };
 		D7B040B42EA3AF3300D6B74D /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A52EA3AF3300D6B74D /* _locales */; };
@@ -46,6 +47,7 @@
 		D7B040BC2EA3AF3300D6B74D /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409E2EA3AF3300D6B74D /* popup.html */; };
 		1D85426687C74A94AD9A3ED5 /* siteManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 26C601628EA14539AAEBFB90 /* siteManager.js */; };
 		D7B040BF2EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */; };
+		D7B040C02EA3AF3300D6B74D /* quickSearch.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A22EA3AF3300D6B74D /* quickSearch.js */; };
 		D7B040C12EA3AF3300D6B74D /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A32EA3AF3300D6B74D /* manifest.json */; };
 		D7B040C22EA3AF3300D6B74D /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A42EA3AF3300D6B74D /* popup.css */; };
 		D7B040C32EA3AF3300D6B74D /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A52EA3AF3300D6B74D /* _locales */; };
@@ -122,6 +124,7 @@
 		D7B0409E2EA3AF3300D6B74D /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = Resources/popup.html; sourceTree = "<group>"; };
 		26C601628EA14539AAEBFB90 /* siteManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = siteManager.js; path = Resources/siteManager.js; sourceTree = "<group>"; };
 		D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = youtubeSearchBar.js; path = Resources/youtubeSearchBar.js; sourceTree = "<group>"; };
+		D7B040A22EA3AF3300D6B74D /* quickSearch.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = quickSearch.js; path = Resources/quickSearch.js; sourceTree = "<group>"; };
 		D7B040A32EA3AF3300D6B74D /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = Resources/manifest.json; sourceTree = "<group>"; };
 		D7B040A42EA3AF3300D6B74D /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = Resources/popup.css; sourceTree = "<group>"; };
 		D7B040A52EA3AF3300D6B74D /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; name = _locales; path = Resources/_locales; sourceTree = "<group>"; };
@@ -261,6 +264,7 @@
 				D7B0409E2EA3AF3300D6B74D /* popup.html */,
 				26C601628EA14539AAEBFB90 /* siteManager.js */,
 				D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */,
+				D7B040A22EA3AF3300D6B74D /* quickSearch.js */,
 				D7B040A32EA3AF3300D6B74D /* manifest.json */,
 				D7B040A42EA3AF3300D6B74D /* popup.css */,
 				D7B040A52EA3AF3300D6B74D /* _locales */,
@@ -437,6 +441,7 @@
 				D7B040C12EA3AF3300D6B74D /* manifest.json in Resources */,
 				D7B040B92EA3AF3300D6B74D /* background.js in Resources */,
 				D7B040BF2EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */,
+				D7B040C02EA3AF3300D6B74D /* quickSearch.js in Resources */,
 				D7B040C22EA3AF3300D6B74D /* popup.css in Resources */,
 				D7B040C32EA3AF3300D6B74D /* _locales in Resources */,
 			);
@@ -453,6 +458,7 @@
 				D7B040B22EA3AF3300D6B74D /* manifest.json in Resources */,
 				D7B040AA2EA3AF3300D6B74D /* background.js in Resources */,
 				D7B040B02EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */,
+				D7B040B12EA3AF3300D6B74D /* quickSearch.js in Resources */,
 				D7B040B32EA3AF3300D6B74D /* popup.css in Resources */,
 				D7B040AB2EA3AF3300D6B74D /* ipDisplay.js in Resources */,
 				D7B040B42EA3AF3300D6B74D /* _locales in Resources */,

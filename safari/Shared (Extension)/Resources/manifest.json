@@ -32,8 +32,29 @@
                 "mac": "Command+B"
             },
             "description": "Activate the extension popup"
+        },
+        "quick_search": {
+            "suggested_key": {
+                "default": "Alt+S",
+                "mac": "Command+S"
+            },
+            "description": "Quick search selected text"
+        },
+        "direct_search": {
+            "suggested_key": {
+                "default": "Alt+Shift+S",
+                "mac": "Command+Shift+S"
+            },
+            "description": "Direct search with DuckDuckGo"
         }
     },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["quickSearch.js"],
+            "run_at": "document_end"
+        }
+    ],
     "browser_specific_settings": {
         "gecko": {
             "id": "bin-extension@example.com",

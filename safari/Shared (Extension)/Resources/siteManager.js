@@ -5,7 +5,6 @@
 
 const CONFIG = {
     MAX_SITES: 48,
-    GRID_COLS: 6,
     STORAGE_KEYS: {
         SITES: 'sites',
         FAVICONS: 'favIconUrls'
@@ -143,25 +142,26 @@ class UIManager {
         // Clear container
         this.container.innerHTML = '';
 
-        // Update popup height
-        this.updateHeight(sites.length);
-
         // Render sites
         sites.forEach((site, index) => {
             const button = this.createSiteButton(site, index);
             this.container.appendChild(button);
         });
+
+        // Update popup height after rendering (to get actual container height)
+        requestAnimationFrame(() => {
+            this.updateHeight();
+        });
     }
 
-    updateHeight(siteCount) {
-        const rows = Math.ceil(siteCount / CONFIG.GRID_COLS);
-        const topBarHeight = 50;  // Reduced from 60 to 50
-        const rowHeight = 70;
-        const rowGap = 8;
-        const padding = 16;
+    updateHeight() {
+        const topBar = document.getElementById('top-bar');
+        const topBarHeight = topBar ? topBar.offsetHeight : 56;
+        const bottomPadding = 0;  // No extra bottom padding needed
+        const containerHeight = this.container.offsetHeight || 0;
 
-        const height = topBarHeight + (rows * rowHeight) + ((rows - 1) * rowGap) + padding;
-        document.documentElement.style.height = `${Math.max(height, topBarHeight + padding)}px`;
+        const height = topBarHeight + containerHeight + bottomPadding;
+        document.documentElement.style.height = `${Math.max(height, topBarHeight + bottomPadding)}px`;
     }
 
     createSiteButton(site, index) {
@@ -175,7 +175,7 @@ class UIManager {
 
         button.innerHTML = `
             <span class="close-btn" title="Remove">×</span>
-            <img src="${favicon}" alt="" class="favicon" onerror="this.src='https://www.google.com/s2/favicons?domain=${new URL(site.url).hostname}&sz=32'">
+            <img src="${favicon}" alt="" class="favicon" draggable="false" onerror="this.src='https://www.google.com/s2/favicons?domain=${new URL(site.url).hostname}&sz=32'">
             <div class="site-title">${this.escapeHtml(site.title)}</div>
             <div class="site-url">${this.escapeHtml(this.shortenUrl(site.url))}</div>
         `;
