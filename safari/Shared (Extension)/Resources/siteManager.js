@@ -8,7 +8,29 @@ const CONFIG = {
     STORAGE_KEYS: {
         SITES: 'sites',
         FAVICONS: 'favIconUrls'
-    }
+    },
+    NEW_TAB_URLS: [
+        // Safari new tab URLs
+        'favorites://',
+        'about:blank',
+        'https://www.apple.com/startpage/',
+
+        // Chrome new tab URLs
+        'chrome://newtab/',
+        'chrome-search://local-ntp/local-ntp.html',
+
+        // Edge new tab URLs
+        'edge://newtab/',
+
+        // Firefox new tab URLs
+        'about:newtab',
+        'about:home',
+
+        // Other possible variants
+        'about:privatebrowsing',
+        'chrome://new-tab-page/',
+        'edge://new-tab-page/'
+    ]
 };
 
 // ============================================================================
@@ -205,6 +227,7 @@ class UIManager {
     }
 
     handleOpen(url) {
+        closeAllNewTabs();
         browserAPI.tabs.create({ url: url });
     }
 
@@ -338,3 +361,39 @@ document.addEventListener('DOMContentLoaded', () => {
     app.initialize();
 });
 
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Close all new tab pages before opening a new URL
+ * This provides a cleaner user experience by removing empty tabs
+ */
+function closeAllNewTabs() {
+    browserAPI.tabs.query({}, (tabs) => {
+        const tabIds = tabs
+            .filter(tab => {
+                // Check if tab URL matches any known new tab URL
+                const matchesKnownUrl = CONFIG.NEW_TAB_URLS.some(url =>
+                    tab.url === url || tab.url.includes(url)
+                );
+
+                // Also check for common patterns in URL
+                const matchesPattern =
+                    tab.url.includes('newtab') ||
+                    tab.url.includes('startpage') ||
+                    tab.url.includes('new-tab-page');
+
+                return matchesKnownUrl || matchesPattern;
+            })
+            .map(tab => tab.id);
+
+        if (tabIds.length > 0) {
+            browserAPI.tabs.remove(tabIds, () => {
+                if (browserAPI.runtime.lastError) {
+                    console.log('Error closing tabs:', browserAPI.runtime.lastError.message);
+                }
+            });
+        }
+    });
+}
