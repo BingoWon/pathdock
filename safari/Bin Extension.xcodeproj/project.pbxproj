@@ -7,31 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D85426687C74A94AD9A3ED5 /* siteManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 26C601628EA14539AAEBFB90 /* siteManager.js */; };
-		230D8E67CCF74080BFF24CF1 /* utils.js in Resources */ = {isa = PBXBuildFile; fileRef = F2E48F6A67354E719BA83499 /* utils.js */; };
 		B27E06795B784BB68AE998E2 /* utils.js in Resources */ = {isa = PBXBuildFile; fileRef = F2E48F6A67354E719BA83499 /* utils.js */; };
 		B97BD8DE2FF2B4146B4AE021 /* siteManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 26C601628EA14539AAEBFB90 /* siteManager.js */; };
-		D7B040502EA3AF3200D6B74D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0404F2EA3AF3200D6B74D /* AppDelegate.swift */; };
-		D7B040522EA3AF3200D6B74D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B040512EA3AF3200D6B74D /* SceneDelegate.swift */; };
-		D7B040552EA3AF3200D6B74D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7B040532EA3AF3200D6B74D /* LaunchScreen.storyboard */; };
-		D7B040582EA3AF3200D6B74D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7B040562EA3AF3200D6B74D /* Main.storyboard */; };
 		D7B040612EA3AF3200D6B74D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B040602EA3AF3200D6B74D /* AppDelegate.swift */; };
 		D7B040642EA3AF3200D6B74D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7B040622EA3AF3200D6B74D /* Main.storyboard */; };
-		D7B0406B2EA3AF3200D6B74D /* Bin Extension Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D7B0406A2EA3AF3200D6B74D /* Bin Extension Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D7B040752EA3AF3200D6B74D /* Bin Extension Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D7B040742EA3AF3200D6B74D /* Bin Extension Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		D7B0407A2EA3AF3200D6B74D /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = D7B0403F2EA3AF3100D6B74D /* Main.html */; };
 		D7B0407B2EA3AF3200D6B74D /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = D7B0403F2EA3AF3100D6B74D /* Main.html */; };
-		D7B0407C2EA3AF3200D6B74D /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B040412EA3AF3100D6B74D /* Icon.png */; };
 		D7B0407D2EA3AF3200D6B74D /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B040412EA3AF3100D6B74D /* Icon.png */; };
-		D7B0407E2EA3AF3200D6B74D /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040422EA3AF3100D6B74D /* Style.css */; };
 		D7B0407F2EA3AF3200D6B74D /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040422EA3AF3100D6B74D /* Style.css */; };
-		D7B040802EA3AF3200D6B74D /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040432EA3AF3100D6B74D /* Script.js */; };
 		D7B040812EA3AF3200D6B74D /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040432EA3AF3100D6B74D /* Script.js */; };
-		D7B040822EA3AF3200D6B74D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B040442EA3AF3100D6B74D /* ViewController.swift */; };
 		D7B040832EA3AF3200D6B74D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B040442EA3AF3100D6B74D /* ViewController.swift */; };
-		D7B040842EA3AF3200D6B74D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7B040452EA3AF3200D6B74D /* Assets.xcassets */; };
 		D7B040852EA3AF3200D6B74D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7B040452EA3AF3200D6B74D /* Assets.xcassets */; };
-		D7B040862EA3AF3200D6B74D /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B040472EA3AF3200D6B74D /* SafariWebExtensionHandler.swift */; };
 		D7B040872EA3AF3200D6B74D /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B040472EA3AF3200D6B74D /* SafariWebExtensionHandler.swift */; };
 		D7B040A92EA3AF3300D6B74D /* browserAPI.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409A2EA3AF3300D6B74D /* browserAPI.js */; };
 		D7B040AA2EA3AF3300D6B74D /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409B2EA3AF3300D6B74D /* background.js */; };
@@ -42,24 +28,9 @@
 		D7B040B22EA3AF3300D6B74D /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A32EA3AF3300D6B74D /* manifest.json */; };
 		D7B040B32EA3AF3300D6B74D /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A42EA3AF3300D6B74D /* popup.css */; };
 		D7B040B42EA3AF3300D6B74D /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A52EA3AF3300D6B74D /* _locales */; };
-		D7B040B82EA3AF3300D6B74D /* browserAPI.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409A2EA3AF3300D6B74D /* browserAPI.js */; };
-		D7B040B92EA3AF3300D6B74D /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409B2EA3AF3300D6B74D /* background.js */; };
-		D7B040BB2EA3AF3300D6B74D /* images in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409D2EA3AF3300D6B74D /* images */; };
-		D7B040BC2EA3AF3300D6B74D /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409E2EA3AF3300D6B74D /* popup.html */; };
-		D7B040BF2EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */; };
-		D7B040C12EA3AF3300D6B74D /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A32EA3AF3300D6B74D /* manifest.json */; };
-		D7B040C22EA3AF3300D6B74D /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A42EA3AF3300D6B74D /* popup.css */; };
-		D7B040C32EA3AF3300D6B74D /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A52EA3AF3300D6B74D /* _locales */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		D7B0406C2EA3AF3200D6B74D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D7B040392EA3AF3100D6B74D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D7B040692EA3AF3200D6B74D;
-			remoteInfo = "Bin Extension Extension (iOS)";
-		};
 		D7B040762EA3AF3200D6B74D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D7B040392EA3AF3100D6B74D /* Project object */;
@@ -70,17 +41,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		D7B0408D2EA3AF3200D6B74D /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				D7B0406B2EA3AF3200D6B74D /* Bin Extension Extension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D7B040942EA3AF3200D6B74D /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -104,19 +64,15 @@
 		D7B040452EA3AF3200D6B74D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D7B040472EA3AF3200D6B74D /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
 		D7B0404C2EA3AF3200D6B74D /* Bin Extension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bin Extension.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7B0404F2EA3AF3200D6B74D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D7B040512EA3AF3200D6B74D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D7B040542EA3AF3200D6B74D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D7B040572EA3AF3200D6B74D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		D7B040592EA3AF3200D6B74D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D7B0405E2EA3AF3200D6B74D /* Bin Extension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bin Extension.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7B040602EA3AF3200D6B74D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D7B040632EA3AF3200D6B74D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D7B040652EA3AF3200D6B74D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D7B040662EA3AF3200D6B74D /* Bin Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bin Extension.entitlements"; sourceTree = "<group>"; };
 		D7B0406A2EA3AF3200D6B74D /* Bin Extension Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bin Extension Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7B0406F2EA3AF3200D6B74D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D7B040742EA3AF3200D6B74D /* Bin Extension Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bin Extension Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7B040792EA3AF3200D6B74D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D7B0407A2EA3AF3200D6B74D /* Bin Extension Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bin Extension Extension.entitlements"; sourceTree = "<group>"; };
 		D7B0409A2EA3AF3300D6B74D /* browserAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = browserAPI.js; path = Resources/browserAPI.js; sourceTree = "<group>"; };
 		D7B0409B2EA3AF3300D6B74D /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = Resources/background.js; sourceTree = "<group>"; };
 		D7B0409C2EA3AF3300D6B74D /* ipDisplay.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = ipDisplay.js; path = Resources/ipDisplay.js; sourceTree = "<group>"; };
@@ -130,21 +86,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D7B040492EA3AF3200D6B74D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D7B0405B2EA3AF3200D6B74D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D7B040672EA3AF3200D6B74D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -166,9 +108,7 @@
 			children = (
 				D7B0403D2EA3AF3100D6B74D /* Shared (App) */,
 				D7B040462EA3AF3200D6B74D /* Shared (Extension) */,
-				D7B0404E2EA3AF3200D6B74D /* iOS (App) */,
 				D7B0405F2EA3AF3200D6B74D /* macOS (App) */,
-				D7B0406E2EA3AF3200D6B74D /* iOS (Extension) */,
 				D7B040782EA3AF3200D6B74D /* macOS (Extension) */,
 				D7B0404D2EA3AF3200D6B74D /* Products */,
 			);
@@ -215,40 +155,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D7B0404E2EA3AF3200D6B74D /* iOS (App) */ = {
-			isa = PBXGroup;
-			children = (
-				D7B0404F2EA3AF3200D6B74D /* AppDelegate.swift */,
-				D7B040512EA3AF3200D6B74D /* SceneDelegate.swift */,
-				D7B040532EA3AF3200D6B74D /* LaunchScreen.storyboard */,
-				D7B040562EA3AF3200D6B74D /* Main.storyboard */,
-				D7B040592EA3AF3200D6B74D /* Info.plist */,
-			);
-			path = "iOS (App)";
-			sourceTree = "<group>";
-		};
 		D7B0405F2EA3AF3200D6B74D /* macOS (App) */ = {
 			isa = PBXGroup;
 			children = (
 				D7B040602EA3AF3200D6B74D /* AppDelegate.swift */,
 				D7B040622EA3AF3200D6B74D /* Main.storyboard */,
 				D7B040652EA3AF3200D6B74D /* Info.plist */,
+				D7B040662EA3AF3200D6B74D /* Bin Extension.entitlements */,
 			);
 			path = "macOS (App)";
-			sourceTree = "<group>";
-		};
-		D7B0406E2EA3AF3200D6B74D /* iOS (Extension) */ = {
-			isa = PBXGroup;
-			children = (
-				D7B0406F2EA3AF3200D6B74D /* Info.plist */,
-			);
-			path = "iOS (Extension)";
 			sourceTree = "<group>";
 		};
 		D7B040782EA3AF3200D6B74D /* macOS (Extension) */ = {
 			isa = PBXGroup;
 			children = (
 				D7B040792EA3AF3200D6B74D /* Info.plist */,
+				D7B0407A2EA3AF3200D6B74D /* Bin Extension Extension.entitlements */,
 			);
 			path = "macOS (Extension)";
 			sourceTree = "<group>";
@@ -325,13 +247,7 @@
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
-					D7B0404B2EA3AF3200D6B74D = {
-						CreatedOnToolsVersion = 26.0.1;
-					};
 					D7B0405D2EA3AF3200D6B74D = {
-						CreatedOnToolsVersion = 26.0.1;
-					};
-					D7B040692EA3AF3200D6B74D = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
 					D7B040732EA3AF3200D6B74D = {
@@ -360,20 +276,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D7B0404A2EA3AF3200D6B74D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D7B0407C2EA3AF3200D6B74D /* Icon.png in Resources */,
-				D7B040552EA3AF3200D6B74D /* LaunchScreen.storyboard in Resources */,
-				D7B0407A2EA3AF3200D6B74D /* Main.html in Resources */,
-				D7B040802EA3AF3200D6B74D /* Script.js in Resources */,
-				D7B040842EA3AF3200D6B74D /* Assets.xcassets in Resources */,
-				D7B040582EA3AF3200D6B74D /* Main.storyboard in Resources */,
-				D7B0407E2EA3AF3200D6B74D /* Style.css in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D7B0405C2EA3AF3200D6B74D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -384,23 +286,6 @@
 				D7B040812EA3AF3200D6B74D /* Script.js in Resources */,
 				D7B040852EA3AF3200D6B74D /* Assets.xcassets in Resources */,
 				D7B0407B2EA3AF3200D6B74D /* Main.html in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D7B040682EA3AF3200D6B74D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D7B040BB2EA3AF3300D6B74D /* images in Resources */,
-				D7B040BC2EA3AF3300D6B74D /* popup.html in Resources */,
-				1D85426687C74A94AD9A3ED5 /* siteManager.js in Resources */,
-				D7B040B82EA3AF3300D6B74D /* browserAPI.js in Resources */,
-				D7B040C12EA3AF3300D6B74D /* manifest.json in Resources */,
-				D7B040B92EA3AF3300D6B74D /* background.js in Resources */,
-				D7B040BF2EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */,
-				230D8E67CCF74080BFF24CF1 /* utils.js in Resources */,
-				D7B040C22EA3AF3300D6B74D /* popup.css in Resources */,
-				D7B040C32EA3AF3300D6B74D /* _locales in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,30 +310,12 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		D7B040482EA3AF3200D6B74D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D7B040822EA3AF3200D6B74D /* ViewController.swift in Sources */,
-				D7B040502EA3AF3200D6B74D /* AppDelegate.swift in Sources */,
-				D7B040522EA3AF3200D6B74D /* SceneDelegate.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D7B0405A2EA3AF3200D6B74D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				D7B040832EA3AF3200D6B74D /* ViewController.swift in Sources */,
 				D7B040612EA3AF3200D6B74D /* AppDelegate.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D7B040662EA3AF3200D6B74D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D7B040862EA3AF3200D6B74D /* SafariWebExtensionHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,11 +330,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D7B0406D2EA3AF3200D6B74D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D7B040692EA3AF3200D6B74D /* Bin Extension Extension (iOS) */;
-			targetProxy = D7B0406C2EA3AF3200D6B74D /* PBXContainerItemProxy */;
-		};
 		D7B040772EA3AF3200D6B74D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D7B040732EA3AF3200D6B74D /* Bin Extension Extension (macOS) */;
@@ -482,22 +344,6 @@
 				D7B040402EA3AF3100D6B74D /* Base */,
 			);
 			name = Main.html;
-			sourceTree = "<group>";
-		};
-		D7B040532EA3AF3200D6B74D /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D7B040542EA3AF3200D6B74D /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		D7B040562EA3AF3200D6B74D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D7B040572EA3AF3200D6B74D /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		D7B040622EA3AF3200D6B74D /* Main.storyboard */ = {
@@ -625,161 +471,13 @@
 			};
 			name = Release;
 		};
-		D7B0408B2EA3AF3200D6B74D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension Extension";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.bin-extension.Extension";
-				PRODUCT_NAME = "Bin Extension Extension";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		D7B0408C2EA3AF3200D6B74D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension Extension";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.bin-extension.Extension";
-				PRODUCT_NAME = "Bin Extension Extension";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		D7B0408F2EA3AF3200D6B74D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5C4299VVGU;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "iOS (App)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension";
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-					"-framework",
-					WebKit,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.bin-extension";
-				PRODUCT_NAME = "Bin Extension";
-				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		D7B040902EA3AF3200D6B74D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5C4299VVGU;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "iOS (App)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension";
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				OTHER_LDFLAGS = (
-					"-framework",
-					SafariServices,
-					"-framework",
-					WebKit,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.bin-extension";
-				PRODUCT_NAME = "Bin Extension";
-				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		D7B040922EA3AF3200D6B74D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Bin Extension Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5C4299VVGU;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -802,8 +500,8 @@
 				PRODUCT_NAME = "Bin Extension Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
@@ -814,8 +512,10 @@
 		D7B040932EA3AF3200D6B74D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Bin Extension Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5C4299VVGU;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -838,8 +538,8 @@
 				PRODUCT_NAME = "Bin Extension Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
@@ -852,6 +552,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Bin Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5C4299VVGU;
@@ -880,8 +581,8 @@
 				PRODUCT_NAME = "Bin Extension";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -895,6 +596,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Bin Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5C4299VVGU;
@@ -923,8 +625,8 @@
 				PRODUCT_NAME = "Bin Extension";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
