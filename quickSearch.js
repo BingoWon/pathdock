@@ -1,48 +1,48 @@
 // Browser API compatibility layer for Edge and Firefox
 const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 
-// 监听选中文本的快捷键操作
+// Listen for keyboard shortcuts on selected text
 document.addEventListener('keydown', function(e) {
     // Windows/Linux: Alt + S
     // Mac: Control + S (MacCtrl+S)
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-    
+
     let isShortcutTriggered = false;
     let isDirectSearchTriggered = false;
-    
+
     if (isMac) {
-        // 在Mac上，使用Control+S
+        // On Mac, use Control+S
         isShortcutTriggered = e.ctrlKey && !e.shiftKey && (e.key === 's' || e.key === 'S');
-        // 在Mac上，使用Control+Shift+S直接搜索
+        // On Mac, use Control+Shift+S for direct search
         isDirectSearchTriggered = e.ctrlKey && e.shiftKey && (e.key === 's' || e.key === 'S');
     } else {
-        // 在Windows/Linux上，正常检测Alt+S
+        // On Windows/Linux, use Alt+S
         isShortcutTriggered = e.altKey && !e.shiftKey && (e.key === 's' || e.key === 'S');
-        // 在Windows/Linux上，使用Alt+Shift+S直接搜索
+        // On Windows/Linux, use Alt+Shift+S for direct search
         isDirectSearchTriggered = e.altKey && e.shiftKey && (e.key === 's' || e.key === 'S');
     }
-    
+
     if (isShortcutTriggered || isDirectSearchTriggered) {
-        e.preventDefault(); // 阻止默认行为，防止保存页面等浏览器默认操作
-        e.stopPropagation(); // 阻止事件冒泡
-        
-        // 获取选中文本并进行彻底清洗
+        e.preventDefault(); // Prevent default behavior (e.g., save page)
+        e.stopPropagation(); // Stop event bubbling
+
+        // Get selected text and clean it thoroughly
         const rawText = window.getSelection().toString();
         const cleanedText = cleanText(rawText);
-        
+
         if (cleanedText) {
-            // 将清洗后的文本复制到剪贴板
+            // Copy cleaned text to clipboard
             copyToClipboard(cleanedText);
-            
+
             if (isShortcutTriggered && isValidUrl(cleanedText)) {
-                // 如果是普通快捷键且选中的文本是URL，直接打开
+                // If normal shortcut and text is URL, open directly
                 let url = cleanedText;
                 if (!url.startsWith('http')) {
                     url = 'https://' + url;
                 }
                 browserAPI.runtime.sendMessage({ action: "openNewTab", url: url });
             } else {
-                // 如果是直接搜索快捷键或者文本不是URL，使用DuckDuckGo搜索
+                // If direct search shortcut or text is not URL, search with DuckDuckGo
                 const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(cleanedText)}`;
                 browserAPI.runtime.sendMessage({ action: "openNewTab", url: searchUrl });
             }
@@ -50,26 +50,26 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// 监听来自background.js的消息
+// Listen for messages from background.js
 browserAPI.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === "triggerSearch") {
-        // 获取选中文本并进行彻底清洗
+        // Get selected text and clean it thoroughly
         const rawText = window.getSelection().toString();
         const cleanedText = cleanText(rawText);
 
         if (cleanedText) {
-            // 将清洗后的文本复制到剪贴板
+            // Copy cleaned text to clipboard
             copyToClipboard(cleanedText);
 
             if (request.command === "quick_search" && isValidUrl(cleanedText)) {
-                // 如果是普通搜索命令且选中的文本是URL，直接打开
+                // If normal search command and text is URL, open directly
                 let url = cleanedText;
                 if (!url.startsWith('http')) {
                     url = 'https://' + url;
                 }
                 browserAPI.runtime.sendMessage({ action: "openNewTab", url: url });
             } else {
-                // 如果是直接搜索命令或者文本不是URL，使用DuckDuckGo搜索
+                // If direct search command or text is not URL, search with DuckDuckGo
                 const searchUrl = `https://duckduckgo.com/?q=${encodeURIComponent(cleanedText)}`;
                 browserAPI.runtime.sendMessage({ action: "openNewTab", url: searchUrl });
             }
@@ -77,51 +77,51 @@ browserAPI.runtime.onMessage.addListener(function(request, sender, sendResponse)
     }
 });
 
-// 彻底清洗文本，类似Python的strip()但更强大
+// Clean text thoroughly (similar to Python's strip() but more powerful)
 function cleanText(text) {
     if (!text) return '';
-    
-    // 1. 去除首尾空白字符（空格、制表符、换行符等）
+
+    // 1. Remove leading/trailing whitespace (spaces, tabs, newlines, etc.)
     let cleaned = text.trim();
-    
-    // 2. 去除首尾的引号（单引号、双引号、反引号）
+
+    // 2. Remove leading/trailing quotes (single, double, backtick)
     cleaned = cleaned.replace(/^["'`]+|["'`]+$/g, '');
-    
-    // 3. 去除首尾的括号
+
+    // 3. Remove leading/trailing parentheses
     cleaned = cleaned.replace(/^\(+|\)+$/g, '');
     cleaned = cleaned.replace(/^\[+|\]+$/g, '');
     cleaned = cleaned.replace(/^\{+|\}+$/g, '');
-    
-    // 4. 去除首尾的特殊标点
+
+    // 4. Remove leading/trailing special punctuation
     cleaned = cleaned.replace(/^[.,;:!?]+|[.,;:!?]+$/g, '');
-    
-    // 5. 替换多个连续空格为单个空格
+
+    // 5. Replace multiple consecutive spaces with single space
     cleaned = cleaned.replace(/\s+/g, ' ');
-    
+
     return cleaned;
 }
 
-// 复制文本到剪贴板
+// Copy text to clipboard
 function copyToClipboard(text) {
-    // 使用现代的Clipboard API
+    // Use modern Clipboard API
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).catch(err => {
-            console.error('无法复制到剪贴板:', err);
-            // 如果Clipboard API失败，使用传统方法
+            console.error('Failed to copy to clipboard:', err);
+            // If Clipboard API fails, use fallback method
             fallbackCopyToClipboard(text);
         });
     } else {
-        // 浏览器不支持Clipboard API，使用传统方法
+        // Browser doesn't support Clipboard API, use fallback method
         fallbackCopyToClipboard(text);
     }
 }
 
-// 传统的复制到剪贴板方法（兼容性更好）
+// Fallback method for copying to clipboard (better compatibility)
 function fallbackCopyToClipboard(text) {
     const textArea = document.createElement('textarea');
     textArea.value = text;
-    
-    // 使textArea不可见
+
+    // Make textArea invisible
     textArea.style.position = 'fixed';
     textArea.style.top = '0';
     textArea.style.left = '0';
@@ -132,49 +132,49 @@ function fallbackCopyToClipboard(text) {
     textArea.style.outline = 'none';
     textArea.style.boxShadow = 'none';
     textArea.style.background = 'transparent';
-    
+
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    
+
     try {
         document.execCommand('copy');
     } catch (err) {
-        console.error('复制到剪贴板失败:', err);
+        console.error('Failed to copy to clipboard:', err);
     }
-    
+
     document.body.removeChild(textArea);
 }
 
-// 检查文本是否是URL - 更严格的检查
+// Check if text is a valid URL (strict validation)
 function isValidUrl(text) {
-    // 如果文本包含空格，很可能不是URL
+    // If text contains spaces, it's likely not a URL
     if (text.includes(' ')) {
         return false;
     }
-    
-    // 检查是否已经是完整的URL格式
+
+    // Check if it's already a complete URL format
     try {
         const url = new URL(text);
         return url.protocol === 'http:' || url.protocol === 'https:';
     } catch (e) {
-        // 不是完整URL，继续检查
+        // Not a complete URL, continue checking
     }
-    
-    // 检查是否可能是不带协议的URL
-    // 1. 必须包含至少一个点（域名分隔符）
+
+    // Check if it might be a URL without protocol
+    // 1. Must contain at least one dot (domain separator)
     if (!text.includes('.')) {
         return false;
     }
-    
-    // 2. 检查常见的顶级域名
+
+    // 2. Check for common top-level domains
     const commonTLDs = [
-        '.com', '.org', '.net', '.edu', '.gov', '.io', '.co', 
-        '.cn', '.de', '.uk', '.ru', '.jp', '.fr', '.it', '.es', 
+        '.com', '.org', '.net', '.edu', '.gov', '.io', '.co',
+        '.cn', '.de', '.uk', '.ru', '.jp', '.fr', '.it', '.es',
         '.au', '.ca', '.in', '.nl', '.br', '.tv', '.info', '.biz',
         '.me', '.app', '.dev', '.ai', '.cloud', '.tech', '.online'
     ];
-    
+
     let hasTLD = false;
     for (const tld of commonTLDs) {
         if (text.toLowerCase().endsWith(tld)) {
@@ -182,35 +182,35 @@ function isValidUrl(text) {
             break;
         }
     }
-    
+
     if (!hasTLD) {
-        // 检查是否包含IP地址格式
+        // Check if it contains IP address format
         const ipPattern = /^(\d{1,3}\.){3}\d{1,3}(:\d+)?(\/.*)?$/;
         if (!ipPattern.test(text)) {
             return false;
         }
     }
-    
-    // 3. 检查是否包含非法字符
+
+    // 3. Check for invalid characters
     const invalidChars = ['<', '>', '"', '`', '{', '}', '|', '\\', '^', '[', ']', '`'];
     for (const char of invalidChars) {
         if (text.includes(char)) {
             return false;
         }
     }
-    
-    // 4. 检查域名部分是否符合规范
+
+    // 4. Check if domain part is valid
     try {
-        // 尝试构建一个完整URL来验证
+        // Try to construct a complete URL to validate
         const testUrl = new URL('https://' + text);
-        
-        // 检查主机名是否有效
+
+        // Check if hostname is valid
         if (!testUrl.hostname.includes('.')) {
             return false;
         }
-        
+
         return true;
     } catch (e) {
         return false;
     }
-} 
+}
