@@ -150,7 +150,7 @@ body {
 
 /* Add button in top bar */
 .add-button {
-    height: 100%;  /* Fill parent height (32px) */
+    height: 32px;  /* Fixed element height */
     aspect-ratio: 1 / 1;  /* Square button (32px × 32px) */
     border-radius: var(--topbar-border-radius);
     background-color: var(--color-success);
@@ -179,10 +179,9 @@ body {
 /* Top bar */
 #top-bar {
     display: flex;
-    align-items: stretch;  /* Stretch children to fill height */
+    align-items: center;
     gap: var(--topbar-gap);
     padding: var(--spacing-sm) var(--topbar-padding-h) 0 var(--topbar-padding-h);  /* 8px 8px 0 8px */
-    height: 32px;  /* Fixed height for all elements */
     background-color: transparent;
     flex-shrink: 0;
     box-sizing: border-box;
@@ -193,7 +192,7 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    height: 100%;  /* Fill parent height (32px) */
+    height: 32px;  /* Fixed element height */
     background-color: var(--color-bg-light);
     border: 1px solid var(--color-border);
     border-radius: var(--topbar-border-radius);
@@ -235,7 +234,7 @@ body {
     display: flex;
     align-items: stretch;  /* Stretch children to fill height */
     gap: var(--topbar-gap);
-    height: 100%;  /* Fill parent height (32px) */
+    height: 32px;  /* Fixed element height */
     flex: 1;
     min-width: 0;
 }
