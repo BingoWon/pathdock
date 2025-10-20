@@ -4,10 +4,8 @@
 // Note: browserAPI is defined in browserAPI.js (loaded first in popup.html)
 
 const CONFIG = {
-    GRID_COLS: 5,
-    GRID_ROWS: 8,
-    MAX_SITES: 40,
-    MAX_PINNED_SITES: 20,
+    MAX_SITES: 48,
+    MAX_PINNED_SITES: 24,
     CACHE_MAX_AGE: 5 * 60 * 1000, // 5 minutes
     STORAGE_KEYS: {
         SITES: 'sites',
@@ -586,6 +584,21 @@ class UIRenderer {
 
         // Reorder DOM to match positions
         this._reorderButtons(sites);
+
+        // Update popup height after rendering
+        requestAnimationFrame(() => {
+            this.updateHeight();
+        });
+    }
+
+    updateHeight() {
+        const topBar = document.getElementById('top-bar');
+        const topBarHeight = topBar ? topBar.offsetHeight : 56;
+        const bottomPadding = 0;
+        const containerHeight = this.container.offsetHeight || 0;
+
+        const height = topBarHeight + containerHeight + bottomPadding;
+        document.documentElement.style.height = `${Math.max(height, topBarHeight + bottomPadding)}px`;
     }
 
     _createButton(site) {
