@@ -2,31 +2,19 @@
     /* Colors */
     --color-primary: #e41e3f;
     --color-success: #4eaf04;
-    --color-warning: #ffc107;
-
     --color-bg: #f0f0f0;
     --color-bg-light: #f8f9fa;
     --color-bg-hover: #e0e0e0;
-    --color-bg-warning: #fff3cd;
-
     --color-border: #ddd;
     --color-text: #333;
     --color-text-secondary: #666;
-    --color-text-warning: #856404;
 
     /* Transitions */
     --transition-fast: 0.2s ease;
-    --transition-medium: 0.3s ease;
 
-    /* Sizes */
-    --icon-size: 14px;
-    --icon-container-size: 20px;
-    --favicon-size: 18px;
-
-    /* Top bar unified sizes */
+    /* Top bar sizes */
     --topbar-height: 40px;
     --topbar-element-height: 32px;
-    --topbar-padding-v: 6px;
     --topbar-padding-h: 10px;
     --topbar-gap: 8px;
     --topbar-border-radius: 6px;
@@ -155,8 +143,6 @@ body {
     color: var(--color-primary);
 }
 
-
-
 /* Add button in top bar */
 .add-button {
     width: var(--topbar-element-height);
@@ -241,7 +227,7 @@ body {
     opacity: 1;
 }
 
-/* YouTube Search - Center (占据剩余空间) */
+/* YouTube Search - Center (takes remaining space) */
 #youtube-search {
     display: flex;
     align-items: center;
