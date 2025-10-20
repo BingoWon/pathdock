@@ -180,7 +180,7 @@ body {
     display: flex;
     align-items: center;
     gap: var(--topbar-gap);
-    padding: var(--topbar-padding-v) var(--topbar-padding-h);  /* 16px 8px */
+    padding: var(--spacing-sm) var(--topbar-padding-h) 0 var(--topbar-padding-h);  /* 8px 8px 0 8px */
     background-color: transparent;
     flex-shrink: 0;
     box-sizing: border-box;
