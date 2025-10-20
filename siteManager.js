@@ -170,21 +170,22 @@ class UIManager {
             this.container.appendChild(button);
         });
 
-        // Update popup height after rendering (to get actual container height)
-        requestAnimationFrame(() => {
-            this.updateHeight();
-        });
+        // Height is now fixed at 600px in CSS (popup.css)
+        // Dynamic height adjustment is disabled to maintain fixed popup size
+        // requestAnimationFrame(() => {
+        //     this.updateHeight();
+        // });
     }
 
-    updateHeight() {
-        const topBar = document.getElementById('top-bar');
-        const topBarHeight = topBar ? topBar.offsetHeight : 56;
-        const bottomPadding = 0;  // No extra bottom padding needed
-        const containerHeight = this.container.offsetHeight || 0;
-
-        const height = topBarHeight + containerHeight + bottomPadding;
-        document.documentElement.style.height = `${Math.max(height, topBarHeight + bottomPadding)}px`;
-    }
+    // updateHeight() {
+    //     const topBar = document.getElementById('top-bar');
+    //     const topBarHeight = topBar ? topBar.offsetHeight : 56;
+    //     const bottomPadding = 0;  // No extra bottom padding needed
+    //     const containerHeight = this.container.offsetHeight || 0;
+    //
+    //     const height = topBarHeight + containerHeight + bottomPadding;
+    //     document.documentElement.style.height = `${Math.max(height, topBarHeight + bottomPadding)}px`;
+    // }
 
     createSiteButton(site, index) {
         const button = document.createElement('div');
