@@ -1,5 +1,8 @@
 "use strict";
 
+const EXPORT_FORMAT = "pathdock-sites";
+const EXPORT_VERSION = 1;
+
 class SiteStore {
     constructor() {
         this.sites = [];
@@ -20,6 +23,24 @@ class SiteStore {
         await browserAPI.storage.sync.set({
             [PathDock.STORAGE_KEYS.SITES]: this.sites
         });
+    }
+
+    exportData() {
+        return {
+            format: EXPORT_FORMAT,
+            version: EXPORT_VERSION,
+            exportedAt: new Date().toISOString(),
+            sites: this.sites.map((site) => ({
+                url: site.url,
+                title: site.title,
+                createdAt: site.createdAt
+            }))
+        };
+    }
+
+    async replaceSites(sites) {
+        this.sites = PathDock.normalizeSites(sites);
+        await this.saveSites();
     }
 
     async saveFavicon(url, faviconUrl) {
@@ -93,6 +114,9 @@ class PopupApp {
         this.elements = {
             addCurrent: document.getElementById("add-current-btn"),
             copyIp: document.getElementById("copy-ip-btn"),
+            exportSites: document.getElementById("export-sites-btn"),
+            importSites: document.getElementById("import-sites-btn"),
+            importSitesInput: document.getElementById("import-sites-input"),
             ip: document.getElementById("public-ip"),
             sites: document.getElementById("buttons-container"),
             youtubeButton: document.querySelector("#youtube-search button"),
@@ -117,6 +141,16 @@ class PopupApp {
             }
         });
         this.elements.youtubeButton.addEventListener("click", () => this.searchYouTube());
+        this.elements.exportSites.addEventListener("click", () => this.exportSites());
+        this.elements.importSites.addEventListener("click", () => this.elements.importSitesInput.click());
+        this.elements.importSitesInput.addEventListener("change", (event) => {
+            this.importSites(event.target.files?.[0]).catch((error) => {
+                console.error("Failed to import sites:", error);
+                alert("Invalid import file.");
+            }).finally(() => {
+                event.target.value = "";
+            });
+        });
 
         browserAPI.storage.onChanged.addListener((changes, areaName) => {
             if ((areaName === "sync" && changes[PathDock.STORAGE_KEYS.SITES]) ||
@@ -312,6 +346,43 @@ class PopupApp {
             }, 1000);
         } catch {
         }
+    }
+
+    exportSites() {
+        const date = new Date().toISOString().slice(0, 10);
+        const filename = `pathdock-sites-${date}.json`;
+        const blob = new Blob([`${JSON.stringify(this.store.exportData(), null, 2)}\n`], {
+            type: "application/json"
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = filename;
+        link.rel = "noopener";
+        document.body.append(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    async importSites(file) {
+        if (!file) return;
+
+        const data = JSON.parse(await file.text());
+        if (data?.format !== EXPORT_FORMAT ||
+            data.version !== EXPORT_VERSION ||
+            !Array.isArray(data.sites)) {
+            throw new Error("Unsupported import file.");
+        }
+
+        const sites = PathDock.normalizeSites(data.sites);
+        const message = `Import ${sites.length} site${sites.length === 1 ? "" : "s"} and replace the current list?`;
+        if (!confirm(message)) return;
+
+        await this.store.replaceSites(sites);
+        this.render();
     }
 
     shortenUrl(url) {

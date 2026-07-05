@@ -229,6 +229,42 @@ body {
     opacity: 1;
 }
 
+#backup-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--topbar-gap);
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.utility-button {
+    height: 32px;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--topbar-border-radius);
+    background-color: var(--color-bg-light);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+    flex-shrink: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.utility-button:hover {
+    background-color: var(--color-bg-hover);
+    transform: scale(1.05);
+}
+
+.utility-button:active {
+    transform: scale(0.95);
+}
+
 /* YouTube Search - Center (takes remaining space) */
 #youtube-search {
     display: flex;

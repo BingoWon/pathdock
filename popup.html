@@ -16,6 +16,11 @@
             <input type="search" name="search_query" placeholder="Search YouTube..." required id="youtube-search-input">
             <button type="submit">Search</button>
         </div>
+        <div id="backup-actions">
+            <button id="export-sites-btn" class="utility-button" title="Export sites" aria-label="Export sites">⇩</button>
+            <button id="import-sites-btn" class="utility-button" title="Import sites" aria-label="Import sites">⇧</button>
+            <input id="import-sites-input" class="hidden" type="file" accept="application/json,.json">
+        </div>
         <button id="add-current-btn" class="add-button" title="Add current tab">➕</button>
     </div>
     <div id="buttons-container"></div>
