@@ -244,7 +244,6 @@ body {
     background-color: var(--color-bg-light);
     color: var(--color-text);
     border: 1px solid var(--color-border);
-    font-size: 16px;
     line-height: 1;
     cursor: pointer;
     display: flex;
@@ -254,6 +253,16 @@ body {
     flex-shrink: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+.utility-icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .utility-button:hover {

@@ -38,8 +38,28 @@ class SiteStore {
         };
     }
 
-    async replaceSites(sites) {
-        this.sites = PathDock.normalizeSites(sites);
+    planImport(sites) {
+        const imported = PathDock.normalizeSites(sites);
+        const existingUrls = new Set(this.sites.map((site) => site.url));
+        const remainingSlots = Math.max(PathDock.MAX_SITES - this.sites.length, 0);
+        const additions = [];
+
+        for (const site of imported) {
+            if (existingUrls.has(site.url)) continue;
+            if (additions.length === remainingSlots) break;
+
+            existingUrls.add(site.url);
+            additions.push(site);
+        }
+
+        return {
+            additions,
+            skipped: imported.length - additions.length
+        };
+    }
+
+    async appendSites(sites) {
+        this.sites = [...this.sites, ...sites];
         await this.saveSites();
     }
 
@@ -377,12 +397,21 @@ class PopupApp {
             throw new Error("Unsupported import file.");
         }
 
-        const sites = PathDock.normalizeSites(data.sites);
-        const message = `Import ${sites.length} site${sites.length === 1 ? "" : "s"} and replace the current list?`;
+        const { additions, skipped } = this.store.planImport(data.sites);
+        if (additions.length === 0) {
+            alert("No new sites to import.");
+            return;
+        }
+
+        const message = `Import ${additions.length} new site${additions.length === 1 ? "" : "s"}? Existing sites will remain.`;
         if (!confirm(message)) return;
 
-        await this.store.replaceSites(sites);
+        await this.store.appendSites(additions);
         this.render();
+
+        if (skipped > 0) {
+            alert(`${skipped} duplicate or overflow site${skipped === 1 ? " was" : "s were"} skipped.`);
+        }
     }
 
     shortenUrl(url) {
