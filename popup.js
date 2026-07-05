@@ -2,6 +2,15 @@
 
 const EXPORT_FORMAT = "pathdock-sites";
 const EXPORT_VERSION = 1;
+const BACKUP_EXTENSION = ".pathdock";
+
+function logInfo(message, details = {}) {
+    console.info(`[PathDock] ${message}`, details);
+}
+
+function logWarn(message, details = {}) {
+    console.warn(`[PathDock] ${message}`, details);
+}
 
 class SiteStore {
     constructor() {
@@ -150,6 +159,9 @@ class PopupApp {
         this.render();
         this.loadPublicIp();
         this.elements.youtubeInput.focus();
+        logInfo("Popup initialized", {
+            sites: this.store.sites.length
+        });
     }
 
     bindEvents() {
@@ -161,9 +173,19 @@ class PopupApp {
             }
         });
         this.elements.youtubeButton.addEventListener("click", () => this.searchYouTube());
-        this.elements.exportSites.addEventListener("click", () => this.exportSites());
-        this.elements.importSites.addEventListener("click", () => this.elements.importSitesInput.click());
+        this.elements.exportSites.addEventListener("click", () => {
+            logInfo("Export button clicked");
+            this.exportSites();
+        });
+        this.elements.importSites.addEventListener("click", () => {
+            logInfo("Import file picker opened");
+            this.elements.importSitesInput.click();
+        });
         this.elements.importSitesInput.addEventListener("change", (event) => {
+            logInfo("Import file selected", {
+                count: event.target.files?.length ?? 0,
+                name: event.target.files?.[0]?.name ?? ""
+            });
             this.importSites(event.target.files?.[0]).catch((error) => {
                 console.error("Failed to import sites:", error);
                 alert("Invalid import file.");
@@ -370,7 +392,7 @@ class PopupApp {
 
     exportSites() {
         const date = new Date().toISOString().slice(0, 10);
-        const filename = `pathdock-sites-${date}.pathdock`;
+        const filename = `pathdock-sites-${date}${BACKUP_EXTENSION}`;
         const blob = new Blob([`${JSON.stringify(this.store.exportData(), null, 2)}\n`], {
             type: "application/json"
         });
@@ -385,10 +407,20 @@ class PopupApp {
         link.remove();
 
         setTimeout(() => URL.revokeObjectURL(url), 1000);
+        logInfo("Sites exported", {
+            filename,
+            count: this.store.sites.length
+        });
     }
 
     async importSites(file) {
-        if (!file) return;
+        if (!file) {
+            logWarn("Import cancelled before file selection");
+            return;
+        }
+        if (!file.name.toLowerCase().endsWith(BACKUP_EXTENSION)) {
+            throw new Error(`Import file must use the ${BACKUP_EXTENSION} extension.`);
+        }
 
         const data = JSON.parse(await file.text());
         if (data?.format !== EXPORT_FORMAT ||
@@ -398,7 +430,18 @@ class PopupApp {
         }
 
         const { additions, skipped } = this.store.planImport(data.sites);
+        logInfo("Import file parsed", {
+            filename: file.name,
+            imported: data.sites.length,
+            additions: additions.length,
+            skipped
+        });
+
         if (additions.length === 0) {
+            logWarn("Import skipped because there are no new sites", {
+                filename: file.name,
+                skipped
+            });
             alert("No new sites to import.");
             return;
         }
@@ -408,6 +451,11 @@ class PopupApp {
 
         await this.store.appendSites(additions);
         this.render();
+        logInfo("Sites imported", {
+            added: additions.length,
+            total: this.store.sites.length,
+            skipped
+        });
 
         if (skipped > 0) {
             alert(`${skipped} duplicate or overflow site${skipped === 1 ? " was" : "s were"} skipped.`);
