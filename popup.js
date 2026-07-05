@@ -12,6 +12,21 @@ function logWarn(message, details = {}) {
     console.warn(`[PathDock] ${message}`, details);
 }
 
+function timestampForFilename(date = new Date()) {
+    const parts = [
+        date.getFullYear(),
+        date.getMonth() + 1,
+        date.getDate(),
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds()
+    ];
+
+    return parts
+        .map((part) => String(part).padStart(2, "0"))
+        .join("-");
+}
+
 class SiteStore {
     constructor() {
         this.sites = [];
@@ -391,8 +406,7 @@ class PopupApp {
     }
 
     exportSites() {
-        const date = new Date().toISOString().slice(0, 10);
-        const filename = `pathdock-sites-${date}${BACKUP_EXTENSION}`;
+        const filename = `pathdock-sites-${timestampForFilename()}${BACKUP_EXTENSION}`;
         const blob = new Blob([`${JSON.stringify(this.store.exportData(), null, 2)}\n`], {
             type: "application/json"
         });
@@ -446,9 +460,6 @@ class PopupApp {
             return;
         }
 
-        const message = `Import ${additions.length} new site${additions.length === 1 ? "" : "s"}? Existing sites will remain.`;
-        if (!confirm(message)) return;
-
         await this.store.appendSites(additions);
         this.render();
         logInfo("Sites imported", {
@@ -458,7 +469,9 @@ class PopupApp {
         });
 
         if (skipped > 0) {
-            alert(`${skipped} duplicate or overflow site${skipped === 1 ? " was" : "s were"} skipped.`);
+            logWarn("Some imported sites were skipped", {
+                skipped
+            });
         }
     }
 

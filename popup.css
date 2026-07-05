@@ -156,7 +156,6 @@ body {
     background-color: var(--color-success);
     color: white;
     border: none;
-    font-size: 18px;
     cursor: pointer;
     display: flex;
     align-items: center;

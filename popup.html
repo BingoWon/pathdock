@@ -33,7 +33,12 @@
             </button>
             <input id="import-sites-input" class="hidden" type="file" accept=".pathdock">
         </div>
-        <button id="add-current-btn" class="add-button" title="Add current tab">➕</button>
+        <button id="add-current-btn" class="add-button" title="Add current tab" aria-label="Add current tab">
+            <svg class="utility-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M12 5v14"></path>
+                <path d="M5 12h14"></path>
+            </svg>
+        </button>
     </div>
     <div id="buttons-container"></div>
     <script src="browserAPI.js"></script>
