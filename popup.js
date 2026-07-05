@@ -370,7 +370,7 @@ class PopupApp {
 
     exportSites() {
         const date = new Date().toISOString().slice(0, 10);
-        const filename = `pathdock-sites-${date}.json`;
+        const filename = `pathdock-sites-${date}.pathdock`;
         const blob = new Blob([`${JSON.stringify(this.store.exportData(), null, 2)}\n`], {
             type: "application/json"
         });
