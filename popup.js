@@ -104,7 +104,7 @@ class SiteStore {
     }
 
     faviconFor(url) {
-        return this.favicons[PathDock.hostKey(url)] || PathDock.fallbackFaviconUrl(url);
+        return this.favicons[PathDock.hostKey(url)] || PathDock.siteFaviconUrl(url);
     }
 
     async add(tab) {

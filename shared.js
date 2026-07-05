@@ -155,6 +155,12 @@ globalThis.PathDock = (() => {
         return `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanText(query))}`;
     }
 
+    function siteFaviconUrl(value) {
+        const url = parseHttpUrl(value, { allowBare: false });
+        if (!url) return "";
+        return `${url.origin}/favicon.ico`;
+    }
+
     function fallbackFaviconUrl(value) {
         const key = hostKey(value);
         return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(key)}&sz=32`;
@@ -185,6 +191,7 @@ globalThis.PathDock = (() => {
         normalizeSites,
         searchUrl,
         siteId,
+        siteFaviconUrl,
         titleFromUrl,
         toNavigationUrl,
         toStoredUrl,
