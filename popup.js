@@ -27,6 +27,58 @@ function timestampForFilename(date = new Date()) {
         .join("-");
 }
 
+function privateIpRank(value) {
+    const parts = value.split(".").map(Number);
+    if (parts.length !== 4 || parts.some((part) => !Number.isInteger(part))) return -1;
+    if (parts[0] === 192 && parts[1] === 168) return 0;
+    if (parts[0] === 10) return 1;
+    if (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) return 2;
+    if (parts[0] === 169 && parts[1] === 254) return 3;
+    return -1;
+}
+
+function extractPrivateIps(candidate) {
+    const matches = candidate.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g) ?? [];
+    return matches.filter((value) => privateIpRank(value) >= 0);
+}
+
+async function detectLocalIp() {
+    if (!globalThis.RTCPeerConnection) return "";
+
+    return new Promise((resolve) => {
+        const ips = new Set();
+        const connection = new RTCPeerConnection({ iceServers: [] });
+        let settled = false;
+
+        function finish() {
+            if (settled) return;
+            settled = true;
+            connection.close();
+
+            const [ip = ""] = [...ips].sort((a, b) => privateIpRank(a) - privateIpRank(b));
+            resolve(ip);
+        }
+
+        connection.createDataChannel("pathdock");
+        connection.addEventListener("icecandidate", (event) => {
+            if (!event.candidate) {
+                finish();
+                return;
+            }
+
+            for (const ip of extractPrivateIps(event.candidate.candidate)) {
+                ips.add(ip);
+            }
+        });
+
+        connection.createOffer()
+            .then((offer) => connection.setLocalDescription(offer))
+            .catch(() => finish());
+
+        setTimeout(finish, 1500);
+    });
+}
+
 class SiteStore {
     constructor() {
         this.sites = [];
@@ -154,14 +206,16 @@ class PopupApp {
         this.store = new SiteStore();
         this.draggedElement = null;
         this.draggedIndex = null;
-        this.ip = "";
+        this.publicIp = "";
+        this.localIp = "";
         this.elements = {
             addCurrent: document.getElementById("add-current-btn"),
             copyIp: document.getElementById("copy-ip-btn"),
             exportSites: document.getElementById("export-sites-btn"),
             importSites: document.getElementById("import-sites-btn"),
             importSitesInput: document.getElementById("import-sites-input"),
-            ip: document.getElementById("public-ip"),
+            publicIp: document.getElementById("public-ip"),
+            localIp: document.getElementById("local-ip"),
             sites: document.getElementById("buttons-container"),
             youtubeButton: document.querySelector("#youtube-search button"),
             youtubeInput: document.getElementById("youtube-search-input")
@@ -173,7 +227,8 @@ class PopupApp {
         await this.store.load();
         this.render();
         this.loadPublicIp();
-        this.elements.youtubeInput.focus();
+        this.loadLocalIp();
+        this.focusSearch();
         logInfo("Popup initialized", {
             sites: this.store.sites.length
         });
@@ -228,6 +283,15 @@ class PopupApp {
         );
 
         requestAnimationFrame(() => this.updateHeight());
+    }
+
+    focusSearch() {
+        const input = this.elements.youtubeInput;
+        requestAnimationFrame(() => {
+            input.focus({ preventScroll: true });
+            input.select();
+            setTimeout(() => input.focus({ preventScroll: true }), 0);
+        });
     }
 
     updateHeight() {
@@ -351,7 +415,7 @@ class PopupApp {
 
     async loadPublicIp() {
         try {
-            this.elements.ip.textContent = "...";
+            this.elements.publicIp.textContent = "...";
 
             const cached = await browserAPI.storage.local.get({
                 [PathDock.STORAGE_KEYS.IP_CACHE]: null
@@ -359,28 +423,40 @@ class PopupApp {
             const cache = cached[PathDock.STORAGE_KEYS.IP_CACHE];
 
             if (cache?.ip && Date.now() - cache.time < PathDock.IP_CACHE_TTL_MS) {
-                this.ip = cache.ip;
-                this.elements.ip.textContent = this.ip;
+                this.publicIp = cache.ip;
+                this.elements.publicIp.textContent = this.publicIp;
             }
 
             const response = await fetch("https://api.ipify.org?format=json");
             if (!response.ok) throw new Error("Network error");
 
             const data = await response.json();
-            this.ip = data.ip;
-            this.elements.ip.textContent = this.ip;
+            this.publicIp = data.ip;
+            this.elements.publicIp.textContent = this.publicIp;
 
             await browserAPI.storage.local.set({
                 [PathDock.STORAGE_KEYS.IP_CACHE]: {
-                    ip: this.ip,
+                    ip: this.publicIp,
                     time: Date.now()
                 }
             });
         } catch (error) {
             console.error("Error fetching IP:", error);
-            if (!this.ip) {
-                this.elements.ip.textContent = "N/A";
+            if (!this.publicIp) {
+                this.elements.publicIp.textContent = "N/A";
             }
+        }
+    }
+
+    async loadLocalIp() {
+        this.elements.localIp.textContent = "...";
+        this.localIp = await detectLocalIp();
+        this.elements.localIp.textContent = this.localIp || "N/A";
+
+        if (this.localIp) {
+            logInfo("Local IP detected", { ip: this.localIp });
+        } else {
+            logWarn("Local IP unavailable");
         }
     }
 
@@ -388,10 +464,15 @@ class PopupApp {
         event.preventDefault();
         event.stopPropagation();
 
-        if (!this.ip) return;
+        const text = [
+            this.publicIp ? `Public: ${this.publicIp}` : "",
+            this.localIp ? `Local: ${this.localIp}` : ""
+        ].filter(Boolean).join("  ");
+
+        if (!text) return;
 
         try {
-            await navigator.clipboard.writeText(this.ip);
+            await navigator.clipboard.writeText(text);
 
             const originalText = this.elements.copyIp.textContent;
             this.elements.copyIp.textContent = "✓";

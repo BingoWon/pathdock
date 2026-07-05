@@ -190,7 +190,7 @@ body {
 #ip-display {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     height: 32px;  /* Fixed element height */
     background-color: var(--color-bg-light);
     border: 1px solid var(--color-border);
@@ -203,7 +203,21 @@ body {
     box-sizing: border-box;
 }
 
-#public-ip {
+.ip-group {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.ip-label {
+    font-size: 10px;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0;
+}
+
+#public-ip,
+#local-ip {
     font-family: monospace;
     font-weight: var(--topbar-font-weight);
 }
