@@ -12,7 +12,6 @@ This is a personal tool I built for my own workflow. It has no marketing plan, r
 - Search YouTube from the popup.
 - Search selected text with DuckDuckGo.
 - Open selected text directly when it looks like a URL.
-- Show and copy the current public IP address.
 - Import and export saved sites with a local file.
 - Works as a WebExtension for Edge and as a Safari Web Extension through the included Xcode project.
 

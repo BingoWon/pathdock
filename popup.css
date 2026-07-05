@@ -186,62 +186,6 @@ body {
     box-sizing: border-box;
 }
 
-/* IP Display - Left side */
-#ip-display {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 32px;  /* Fixed element height */
-    background-color: var(--color-bg-light);
-    border: 1px solid var(--color-border);
-    border-radius: var(--topbar-border-radius);
-    padding: 0 var(--spacing-md);  /* 0 12px */
-    font-size: var(--topbar-font-size);
-    color: var(--color-text);
-    white-space: nowrap;
-    flex-shrink: 0;
-    box-sizing: border-box;
-}
-
-.ip-group {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-}
-
-.ip-label {
-    font-size: 10px;
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0;
-}
-
-#public-ip,
-#local-ip {
-    font-family: monospace;
-    font-weight: var(--topbar-font-weight);
-}
-
-#copy-ip-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    padding: 4px;
-    opacity: 0.7;
-    transition: opacity var(--transition-fast);
-    width: auto;
-    height: auto;
-    min-width: unset;
-    min-height: unset;
-    line-height: 1;
-    flex-shrink: 0;
-}
-
-#copy-ip-btn:hover {
-    opacity: 1;
-}
-
 #backup-actions {
     display: flex;
     align-items: center;

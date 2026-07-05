@@ -4,7 +4,7 @@
         "description": "The extension name."
     },
     "extensionDescription": {
-        "message": "A compact browser dock for saved sites, selected-text search, YouTube search, and public IP checks.",
+        "message": "A compact browser dock for saved sites, selected-text search, YouTube search, and local backups.",
         "description": "The extension description."
     },
     "openPopupCommand": {

@@ -3,13 +3,11 @@
 globalThis.PathDock = (() => {
     const STORAGE_KEYS = Object.freeze({
         SITES: "pathdock.sites",
-        FAVICONS: "pathdock.favicons",
-        IP_CACHE: "pathdock.ipCache"
+        FAVICONS: "pathdock.favicons"
     });
 
     const SEARCH_COMMANDS = new Set(["quick_search", "direct_search"]);
     const MAX_SITES = 48;
-    const IP_CACHE_TTL_MS = 5 * 60 * 1000;
 
     const NEW_TAB_URLS = new Set([
         "about:blank",
@@ -178,7 +176,6 @@ globalThis.PathDock = (() => {
     }
 
     return Object.freeze({
-        IP_CACHE_TTL_MS,
         MAX_SITES,
         SEARCH_COMMANDS,
         STORAGE_KEYS,
