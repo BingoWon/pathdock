@@ -28,7 +28,6 @@ globalThis.PathDock = (() => {
     function cleanText(value) {
         return String(value ?? "")
             .trim()
-            .replace(/^["'`([{]+|["'`\])}.:,;!?]+$/g, "")
             .replace(/\s+/g, " ");
     }
 
