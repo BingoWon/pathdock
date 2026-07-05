@@ -1,11 +1,10 @@
-# Firefox build directory (auto-generated)
-firefox/
-
 # Safari Xcode build artifacts
-safari/Bin Extension/DerivedData/
+DerivedData/
+safari/DerivedData/
 safari/*.xcworkspace/xcuserdata/
 safari/*.xcodeproj/xcuserdata/
 safari/*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcuserstate
 
 # macOS
 .DS_Store
@@ -17,5 +16,3 @@ safari/*.xcodeproj/project.xcworkspace/xcuserdata/
 # Backup files
 *.bak
 *~
-manifest.chrome.json
-

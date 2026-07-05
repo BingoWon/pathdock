@@ -1,77 +1,91 @@
-// ============================================================================
-// BACKGROUND SERVICE WORKER
-// ============================================================================
+"use strict";
 
-// Browser API compatibility layer for Edge and Firefox
-const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+importScripts("browserAPI.js", "shared.js");
 
-const CONFIG = {
-    STORAGE_KEYS: {
-        SITES: 'sites',
-        FAVICONS: 'favIconUrls'
-    }
-};
+async function loadSites() {
+    const result = await browserAPI.storage.sync.get({
+        [PathDock.STORAGE_KEYS.SITES]: []
+    });
+    const sites = result[PathDock.STORAGE_KEYS.SITES];
+    return Array.isArray(sites) ? sites : [];
+}
 
-// ============================================================================
-// FAVICON MANAGER - Capture Real Favicons
-// ============================================================================
+async function saveFavicon(url, faviconUrl) {
+    if (!PathDock.isUsableFaviconUrl(faviconUrl)) return;
 
-browserAPI.tabs.onUpdated.addListener(async (_, changeInfo, tab) => {
-    if (changeInfo.status !== 'complete' || !tab.url) return;
+    const key = PathDock.hostKey(url);
+    if (!key) return;
 
-    try {
-        const { sites, favIconUrls } = await browserAPI.storage.sync.get([
-            CONFIG.STORAGE_KEYS.SITES,
-            CONFIG.STORAGE_KEYS.FAVICONS
-        ]);
+    const result = await browserAPI.storage.local.get({
+        [PathDock.STORAGE_KEYS.FAVICONS]: {}
+    });
+    const favicons = result[PathDock.STORAGE_KEYS.FAVICONS] ?? {};
 
-        const sitesList = sites ? JSON.parse(sites).sites || [] : [];
-        const favicons = favIconUrls ? JSON.parse(favIconUrls) : {};
+    if (favicons[key] === faviconUrl) return;
 
-        const url = new URL(tab.url);
-        const normalizedUrl = tab.url.replace(/\/$/, '');
-        const hostnameWithPort = `${url.hostname}${url.port ? ':' + url.port : ''}`;
-
-        // Check if this URL is in our sites list
-        const foundSite = sitesList.find(site => site && site.url === normalizedUrl);
-
-        if (foundSite && tab.favIconUrl) {
-            favicons[hostnameWithPort] = tab.favIconUrl;
-
-            await browserAPI.storage.sync.set({
-                [CONFIG.STORAGE_KEYS.FAVICONS]: JSON.stringify(favicons)
-            });
+    await browserAPI.storage.local.set({
+        [PathDock.STORAGE_KEYS.FAVICONS]: {
+            ...favicons,
+            [key]: faviconUrl
         }
-    } catch (error) {
-        // Silently fail for invalid URLs
+    });
+}
+
+async function captureFavicon(tab) {
+    const normalizedUrl = PathDock.toStoredUrl(tab.url);
+    if (!normalizedUrl || !tab.favIconUrl) return;
+
+    const sites = await loadSites();
+    if (sites.some((site) => site.url === normalizedUrl)) {
+        await saveFavicon(normalizedUrl, tab.favIconUrl);
+    }
+}
+
+async function getSelectedText(tabId) {
+    const [{ result } = {}] = await browserAPI.scripting.executeScript({
+        target: { tabId },
+        func: () => window.getSelection()?.toString() ?? ""
+    });
+    return PathDock.cleanText(result);
+}
+
+async function copyText(tabId, text) {
+    await browserAPI.scripting.executeScript({
+        target: { tabId },
+        args: [text],
+        func: (value) => {
+            try {
+                return navigator.clipboard.writeText(value).then(() => true, () => false);
+            } catch {
+                return false;
+            }
+        }
+    });
+}
+
+async function runSearchCommand(command) {
+    const [tab] = await browserAPI.tabs.query({ active: true, currentWindow: true });
+    if (!tab?.id || !PathDock.toStoredUrl(tab.url)) return;
+
+    const text = await getSelectedText(tab.id);
+    if (!text) return;
+
+    await copyText(tab.id, text);
+
+    const directUrl = command === "quick_search" ? PathDock.toNavigationUrl(text) : null;
+    await browserAPI.tabs.create({
+        url: directUrl ?? PathDock.searchUrl(text)
+    });
+}
+
+browserAPI.tabs.onUpdated.addListener((_, changeInfo, tab) => {
+    if (changeInfo.status === "complete" && tab?.url) {
+        captureFavicon(tab).catch(() => {});
     }
 });
-
-// ============================================================================
-// MESSAGE HANDLERS
-// ============================================================================
-
-browserAPI.runtime.onMessage.addListener((request) => {
-    if (request.action === "openNewTab") {
-        browserAPI.tabs.create({ url: request.url });
-    }
-});
-
-// ============================================================================
-// KEYBOARD SHORTCUTS
-// ============================================================================
 
 browserAPI.commands.onCommand.addListener((command) => {
-    if (command === "quick_search" || command === "direct_search") {
-        browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (tabs.length > 0) {
-                browserAPI.tabs.sendMessage(tabs[0].id, {
-                    action: "triggerSearch",
-                    command: command
-                });
-            }
-        });
+    if (PathDock.SEARCH_COMMANDS.has(command)) {
+        runSearchCommand(command).catch(() => {});
     }
 });
-
-

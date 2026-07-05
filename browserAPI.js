@@ -1,8 +1,7 @@
-// ============================================================================
-// BROWSER API COMPATIBILITY LAYER
-// ============================================================================
-// This file provides a unified API for both Chrome/Edge and Firefox
-// Must be loaded before any other extension scripts
+"use strict";
 
-const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+globalThis.browserAPI = globalThis.browser ?? globalThis.chrome;
 
+if (!globalThis.browserAPI) {
+    throw new Error("PathDock requires WebExtension APIs.");
+}

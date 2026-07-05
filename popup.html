@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bin Extension</title>
+    <title>PathDock</title>
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <div id="top-bar">
+    <header id="top-bar">
         <div id="ip-display">
-            <span id="public-ip">Loading IP...</span>
-            <button id="copy-ip-btn" title="Copy IP">📋</button>
+            <span id="public-ip">IP</span>
+            <button id="copy-ip-btn" class="icon-button" type="button" title="Copy IP" aria-label="Copy IP" disabled>Copy</button>
         </div>
-        <div id="youtube-search">
+        <form id="youtube-search">
             <input type="search" name="search_query" placeholder="Search YouTube..." required id="youtube-search-input">
             <button type="submit">Search</button>
-        </div>
-        <button id="add-current-btn" class="add-button" title="Add current tab">➕</button>
-    </div>
-    <div id="buttons-container"></div>
+        </form>
+        <button id="add-current-btn" class="icon-button add-button" type="button" title="Add current tab" aria-label="Add current tab">+</button>
+    </header>
+    <main id="sites" aria-label="Saved sites"></main>
+    <div id="status" role="status" aria-live="polite"></div>
     <script src="browserAPI.js"></script>
-    <script src="siteManager.js"></script>
-    <script src="youtubeSearchBar.js"></script>
-    <script src="ipDisplay.js"></script>
+    <script src="shared.js"></script>
+    <script src="popup.js"></script>
 </body>
 </html>

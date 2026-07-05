@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B27E06795B784BB68AE998E2 /* utils.js in Resources */ = {isa = PBXBuildFile; fileRef = F2E48F6A67354E719BA83499 /* utils.js */; };
-		B97BD8DE2FF2B4146B4AE021 /* siteManager.js in Resources */ = {isa = PBXBuildFile; fileRef = 26C601628EA14539AAEBFB90 /* siteManager.js */; };
+		AA0000010000000000000001 /* shared.js in Resources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000002 /* shared.js */; };
+		AA0000030000000000000003 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = AA0000040000000000000004 /* popup.js */; };
 		D7B040612EA3AF3200D6B74D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B040602EA3AF3200D6B74D /* AppDelegate.swift */; };
 		D7B040642EA3AF3200D6B74D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7B040622EA3AF3200D6B74D /* Main.storyboard */; };
-		D7B040752EA3AF3200D6B74D /* Bin Extension Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D7B040742EA3AF3200D6B74D /* Bin Extension Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D7B040752EA3AF3200D6B74D /* PathDock Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D7B040742EA3AF3200D6B74D /* PathDock Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D7B0407B2EA3AF3200D6B74D /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = D7B0403F2EA3AF3100D6B74D /* Main.html */; };
 		D7B0407D2EA3AF3200D6B74D /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D7B040412EA3AF3100D6B74D /* Icon.png */; };
 		D7B0407F2EA3AF3200D6B74D /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040422EA3AF3100D6B74D /* Style.css */; };
@@ -21,10 +21,8 @@
 		D7B040872EA3AF3200D6B74D /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B040472EA3AF3200D6B74D /* SafariWebExtensionHandler.swift */; };
 		D7B040A92EA3AF3300D6B74D /* browserAPI.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409A2EA3AF3300D6B74D /* browserAPI.js */; };
 		D7B040AA2EA3AF3300D6B74D /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409B2EA3AF3300D6B74D /* background.js */; };
-		D7B040AB2EA3AF3300D6B74D /* ipDisplay.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409C2EA3AF3300D6B74D /* ipDisplay.js */; };
 		D7B040AC2EA3AF3300D6B74D /* images in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409D2EA3AF3300D6B74D /* images */; };
 		D7B040AD2EA3AF3300D6B74D /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = D7B0409E2EA3AF3300D6B74D /* popup.html */; };
-		D7B040B02EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */; };
 		D7B040B22EA3AF3300D6B74D /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A32EA3AF3300D6B74D /* manifest.json */; };
 		D7B040B32EA3AF3300D6B74D /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A42EA3AF3300D6B74D /* popup.css */; };
 		D7B040B42EA3AF3300D6B74D /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = D7B040A52EA3AF3300D6B74D /* _locales */; };
@@ -36,7 +34,7 @@
 			containerPortal = D7B040392EA3AF3100D6B74D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = D7B040732EA3AF3200D6B74D;
-			remoteInfo = "Bin Extension Extension (macOS)";
+			remoteInfo = "PathDock Extension (macOS)";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -47,7 +45,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				D7B040752EA3AF3200D6B74D /* Bin Extension Extension.appex in Embed Foundation Extensions */,
+				D7B040752EA3AF3200D6B74D /* PathDock Extension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,7 +53,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		26C601628EA14539AAEBFB90 /* siteManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = siteManager.js; path = Resources/siteManager.js; sourceTree = "<group>"; };
+		AA0000020000000000000002 /* shared.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = shared.js; sourceTree = "<group>"; };
+		AA0000040000000000000004 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
 		D7B040402EA3AF3100D6B74D /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
 		D7B040412EA3AF3100D6B74D /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		D7B040422EA3AF3100D6B74D /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
@@ -63,26 +62,23 @@
 		D7B040442EA3AF3100D6B74D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D7B040452EA3AF3200D6B74D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D7B040472EA3AF3200D6B74D /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
-		D7B0404C2EA3AF3200D6B74D /* Bin Extension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bin Extension.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7B0405E2EA3AF3200D6B74D /* Bin Extension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bin Extension.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7B0404C2EA3AF3200D6B74D /* PathDock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PathDock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7B0405E2EA3AF3200D6B74D /* PathDock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PathDock.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7B040602EA3AF3200D6B74D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D7B040632EA3AF3200D6B74D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D7B040652EA3AF3200D6B74D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D7B040662EA3AF3200D6B74D /* Bin Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bin Extension.entitlements"; sourceTree = "<group>"; };
-		D7B0406A2EA3AF3200D6B74D /* Bin Extension Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bin Extension Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7B040742EA3AF3200D6B74D /* Bin Extension Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bin Extension Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7B040662EA3AF3200D6B74D /* PathDock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "PathDock.entitlements"; sourceTree = "<group>"; };
+		D7B0406A2EA3AF3200D6B74D /* PathDock Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "PathDock Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7B040742EA3AF3200D6B74D /* PathDock Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "PathDock Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7B040792EA3AF3200D6B74D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D7B0407A2EA3AF3200D6B74D /* Bin Extension Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bin Extension Extension.entitlements"; sourceTree = "<group>"; };
-		D7B0409A2EA3AF3300D6B74D /* browserAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = browserAPI.js; path = Resources/browserAPI.js; sourceTree = "<group>"; };
-		D7B0409B2EA3AF3300D6B74D /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = Resources/background.js; sourceTree = "<group>"; };
-		D7B0409C2EA3AF3300D6B74D /* ipDisplay.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = ipDisplay.js; path = Resources/ipDisplay.js; sourceTree = "<group>"; };
-		D7B0409D2EA3AF3300D6B74D /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = Resources/images; sourceTree = "<group>"; };
-		D7B0409E2EA3AF3300D6B74D /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = Resources/popup.html; sourceTree = "<group>"; };
-		D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = youtubeSearchBar.js; path = Resources/youtubeSearchBar.js; sourceTree = "<group>"; };
-		D7B040A32EA3AF3300D6B74D /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = Resources/manifest.json; sourceTree = "<group>"; };
-		D7B040A42EA3AF3300D6B74D /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = Resources/popup.css; sourceTree = "<group>"; };
-		D7B040A52EA3AF3300D6B74D /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; name = _locales; path = Resources/_locales; sourceTree = "<group>"; };
-		F2E48F6A67354E719BA83499 /* utils.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = utils.js; path = Resources/utils.js; sourceTree = "<group>"; };
+		D7B0407A2EA3AF3200D6B74D /* PathDock Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "PathDock Extension.entitlements"; sourceTree = "<group>"; };
+		D7B0409A2EA3AF3300D6B74D /* browserAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browserAPI.js; sourceTree = "<group>"; };
+		D7B0409B2EA3AF3300D6B74D /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		D7B0409D2EA3AF3300D6B74D /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		D7B0409E2EA3AF3300D6B74D /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		D7B040A32EA3AF3300D6B74D /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		D7B040A42EA3AF3300D6B74D /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
+		D7B040A52EA3AF3300D6B74D /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _locales; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,7 +134,7 @@
 		D7B040462EA3AF3200D6B74D /* Shared (Extension) */ = {
 			isa = PBXGroup;
 			children = (
-				D7B040982EA3AF3300D6B74D /* Resources */,
+				D7B040982EA3AF3300D6B74D /* Extension Source */,
 				D7B040472EA3AF3200D6B74D /* SafariWebExtensionHandler.swift */,
 			);
 			path = "Shared (Extension)";
@@ -147,10 +143,10 @@
 		D7B0404D2EA3AF3200D6B74D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D7B0404C2EA3AF3200D6B74D /* Bin Extension.app */,
-				D7B0405E2EA3AF3200D6B74D /* Bin Extension.app */,
-				D7B0406A2EA3AF3200D6B74D /* Bin Extension Extension.appex */,
-				D7B040742EA3AF3200D6B74D /* Bin Extension Extension.appex */,
+				D7B0404C2EA3AF3200D6B74D /* PathDock.app */,
+				D7B0405E2EA3AF3200D6B74D /* PathDock.app */,
+				D7B0406A2EA3AF3200D6B74D /* PathDock Extension.appex */,
+				D7B040742EA3AF3200D6B74D /* PathDock Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -161,7 +157,7 @@
 				D7B040602EA3AF3200D6B74D /* AppDelegate.swift */,
 				D7B040622EA3AF3200D6B74D /* Main.storyboard */,
 				D7B040652EA3AF3200D6B74D /* Info.plist */,
-				D7B040662EA3AF3200D6B74D /* Bin Extension.entitlements */,
+				D7B040662EA3AF3200D6B74D /* PathDock.entitlements */,
 			);
 			path = "macOS (App)";
 			sourceTree = "<group>";
@@ -170,36 +166,34 @@
 			isa = PBXGroup;
 			children = (
 				D7B040792EA3AF3200D6B74D /* Info.plist */,
-				D7B0407A2EA3AF3200D6B74D /* Bin Extension Extension.entitlements */,
+				D7B0407A2EA3AF3200D6B74D /* PathDock Extension.entitlements */,
 			);
 			path = "macOS (Extension)";
 			sourceTree = "<group>";
 		};
-		D7B040982EA3AF3300D6B74D /* Resources */ = {
+		D7B040982EA3AF3300D6B74D /* Extension Source */ = {
 			isa = PBXGroup;
 			children = (
 				D7B0409A2EA3AF3300D6B74D /* browserAPI.js */,
+				AA0000020000000000000002 /* shared.js */,
 				D7B0409B2EA3AF3300D6B74D /* background.js */,
-				D7B0409C2EA3AF3300D6B74D /* ipDisplay.js */,
-				D7B0409D2EA3AF3300D6B74D /* images */,
 				D7B0409E2EA3AF3300D6B74D /* popup.html */,
-				26C601628EA14539AAEBFB90 /* siteManager.js */,
-				D7B040A12EA3AF3300D6B74D /* youtubeSearchBar.js */,
-				F2E48F6A67354E719BA83499 /* utils.js */,
-				D7B040A32EA3AF3300D6B74D /* manifest.json */,
 				D7B040A42EA3AF3300D6B74D /* popup.css */,
+				AA0000040000000000000004 /* popup.js */,
+				D7B040A32EA3AF3300D6B74D /* manifest.json */,
+				D7B0409D2EA3AF3300D6B74D /* images */,
 				D7B040A52EA3AF3300D6B74D /* _locales */,
 			);
-			name = Resources;
-			path = "Shared (Extension)";
+			name = "Extension Source";
+			path = ..;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D7B0405D2EA3AF3200D6B74D /* Bin Extension (macOS) */ = {
+		D7B0405D2EA3AF3200D6B74D /* PathDock (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D7B040952EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "Bin Extension (macOS)" */;
+			buildConfigurationList = D7B040952EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "PathDock (macOS)" */;
 			buildPhases = (
 				D7B0405A2EA3AF3200D6B74D /* Sources */,
 				D7B0405B2EA3AF3200D6B74D /* Frameworks */,
@@ -211,16 +205,16 @@
 			dependencies = (
 				D7B040772EA3AF3200D6B74D /* PBXTargetDependency */,
 			);
-			name = "Bin Extension (macOS)";
+			name = "PathDock (macOS)";
 			packageProductDependencies = (
 			);
-			productName = "Bin Extension (macOS)";
-			productReference = D7B0405E2EA3AF3200D6B74D /* Bin Extension.app */;
+			productName = "PathDock (macOS)";
+			productReference = D7B0405E2EA3AF3200D6B74D /* PathDock.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D7B040732EA3AF3200D6B74D /* Bin Extension Extension (macOS) */ = {
+		D7B040732EA3AF3200D6B74D /* PathDock Extension (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D7B040912EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "Bin Extension Extension (macOS)" */;
+			buildConfigurationList = D7B040912EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "PathDock Extension (macOS)" */;
 			buildPhases = (
 				D7B040702EA3AF3200D6B74D /* Sources */,
 				D7B040712EA3AF3200D6B74D /* Frameworks */,
@@ -230,11 +224,11 @@
 			);
 			dependencies = (
 			);
-			name = "Bin Extension Extension (macOS)";
+			name = "PathDock Extension (macOS)";
 			packageProductDependencies = (
 			);
-			productName = "Bin Extension Extension (macOS)";
-			productReference = D7B040742EA3AF3200D6B74D /* Bin Extension Extension.appex */;
+			productName = "PathDock Extension (macOS)";
+			productReference = D7B040742EA3AF3200D6B74D /* PathDock Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -255,7 +249,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D7B0403C2EA3AF3100D6B74D /* Build configuration list for PBXProject "Bin Extension" */;
+			buildConfigurationList = D7B0403C2EA3AF3100D6B74D /* Build configuration list for PBXProject "PathDock" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -269,8 +263,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D7B0405D2EA3AF3200D6B74D /* Bin Extension (macOS) */,
-				D7B040732EA3AF3200D6B74D /* Bin Extension Extension (macOS) */,
+				D7B0405D2EA3AF3200D6B74D /* PathDock (macOS) */,
+				D7B040732EA3AF3200D6B74D /* PathDock Extension (macOS) */,
 			);
 		};
 /* End PBXProject section */
@@ -295,14 +289,12 @@
 			files = (
 				D7B040AC2EA3AF3300D6B74D /* images in Resources */,
 				D7B040AD2EA3AF3300D6B74D /* popup.html in Resources */,
-				B97BD8DE2FF2B4146B4AE021 /* siteManager.js in Resources */,
 				D7B040A92EA3AF3300D6B74D /* browserAPI.js in Resources */,
+				AA0000010000000000000001 /* shared.js in Resources */,
 				D7B040B22EA3AF3300D6B74D /* manifest.json in Resources */,
 				D7B040AA2EA3AF3300D6B74D /* background.js in Resources */,
-				D7B040B02EA3AF3300D6B74D /* youtubeSearchBar.js in Resources */,
-				B27E06795B784BB68AE998E2 /* utils.js in Resources */,
+				AA0000030000000000000003 /* popup.js in Resources */,
 				D7B040B32EA3AF3300D6B74D /* popup.css in Resources */,
-				D7B040AB2EA3AF3300D6B74D /* ipDisplay.js in Resources */,
 				D7B040B42EA3AF3300D6B74D /* _locales in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,7 +324,7 @@
 /* Begin PBXTargetDependency section */
 		D7B040772EA3AF3200D6B74D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D7B040732EA3AF3200D6B74D /* Bin Extension Extension (macOS) */;
+			target = D7B040732EA3AF3200D6B74D /* PathDock Extension (macOS) */;
 			targetProxy = D7B040762EA3AF3200D6B74D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -474,30 +466,29 @@
 		D7B040922EA3AF3200D6B74D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Bin Extension Extension.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/PathDock Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5C4299VVGU;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension Extension";
+				INFOPLIST_KEY_CFBundleDisplayName = "PathDock Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.bin-extension.Extension";
-				PRODUCT_NAME = "Bin Extension Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.pathdock.Extension";
+				PRODUCT_NAME = "PathDock Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -512,30 +503,29 @@
 		D7B040932EA3AF3200D6B74D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Bin Extension Extension.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/PathDock Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5C4299VVGU;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension Extension";
+				INFOPLIST_KEY_CFBundleDisplayName = "PathDock Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.bin-extension.Extension";
-				PRODUCT_NAME = "Bin Extension Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.pathdock.Extension";
+				PRODUCT_NAME = "PathDock Extension";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -552,24 +542,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Bin Extension.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/PathDock.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5C4299VVGU;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (App)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension";
+				INFOPLIST_KEY_CFBundleDisplayName = "PathDock";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -577,9 +565,8 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.bin-extension";
-				PRODUCT_NAME = "Bin Extension";
-				REGISTER_APP_GROUPS = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.pathdock";
+				PRODUCT_NAME = "PathDock";
 				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = macosx;
@@ -596,24 +583,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Bin Extension.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/PathDock.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5C4299VVGU;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "macOS (App)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Bin Extension";
+				INFOPLIST_KEY_CFBundleDisplayName = "PathDock";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -621,9 +606,8 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.bin-extension";
-				PRODUCT_NAME = "Bin Extension";
-				REGISTER_APP_GROUPS = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bingo.pathdock";
+				PRODUCT_NAME = "PathDock";
 				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = macosx;
@@ -638,7 +622,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D7B0403C2EA3AF3100D6B74D /* Build configuration list for PBXProject "Bin Extension" */ = {
+		D7B0403C2EA3AF3100D6B74D /* Build configuration list for PBXProject "PathDock" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D7B040882EA3AF3200D6B74D /* Debug */,
@@ -647,7 +631,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D7B040912EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "Bin Extension Extension (macOS)" */ = {
+		D7B040912EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "PathDock Extension (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D7B040922EA3AF3200D6B74D /* Debug */,
@@ -656,7 +640,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D7B040952EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "Bin Extension (macOS)" */ = {
+		D7B040952EA3AF3200D6B74D /* Build configuration list for PBXNativeTarget "PathDock (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D7B040962EA3AF3200D6B74D /* Debug */,

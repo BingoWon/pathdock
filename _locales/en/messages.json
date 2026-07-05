@@ -1,10 +1,19 @@
 {
     "extensionName": {
-        "message": "My Extension",
-        "description": "The name of the extension."
+        "message": "PathDock",
+        "description": "The extension name."
     },
     "extensionDescription": {
-        "message": "This extension does amazing things.",
-        "description": "A description of the extension."
+        "message": "A compact browser dock for saved sites, selected-text search, YouTube search, and public IP checks.",
+        "description": "The extension description."
+    },
+    "openPopupCommand": {
+        "message": "Open PathDock"
+    },
+    "quickSearchCommand": {
+        "message": "Open selected URL or search selected text"
+    },
+    "directSearchCommand": {
+        "message": "Search selected text with DuckDuckGo"
     }
 }
