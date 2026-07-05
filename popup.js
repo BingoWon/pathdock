@@ -8,36 +8,22 @@ class SiteStore {
 
     async load() {
         const [siteResult, faviconResult] = await Promise.all([
-            browserAPI.storage.sync.get({ [PathDock.STORAGE_KEYS.SITES]: [] }),
+            browserAPI.storage.sync.get({
+                [PathDock.STORAGE_KEYS.SITES]: [],
+                [PathDock.LEGACY_STORAGE_KEYS.SITES]: null,
+                [PathDock.LEGACY_STORAGE_KEYS.FAVICONS]: null
+            }),
             browserAPI.storage.local.get({ [PathDock.STORAGE_KEYS.FAVICONS]: {} })
         ]);
 
-        this.sites = this.normalizeSites(siteResult[PathDock.STORAGE_KEYS.SITES]);
-        this.favicons = faviconResult[PathDock.STORAGE_KEYS.FAVICONS] ?? {};
-    }
-
-    normalizeSites(value) {
-        if (!Array.isArray(value)) return [];
-
-        const seen = new Set();
-        const sites = [];
-
-        for (const item of value) {
-            const url = PathDock.toStoredUrl(item?.url);
-            if (!url || seen.has(url)) continue;
-
-            seen.add(url);
-            sites.push({
-                id: item.id || PathDock.siteId(url),
-                url,
-                title: PathDock.cleanText(item.title) || PathDock.titleFromUrl(url),
-                createdAt: Number(item.createdAt) || Date.now()
-            });
-
-            if (sites.length === PathDock.MAX_SITES) break;
-        }
-
-        return sites;
+        this.sites = PathDock.mergeSites(
+            PathDock.parseLegacySites(siteResult[PathDock.LEGACY_STORAGE_KEYS.SITES]),
+            siteResult[PathDock.STORAGE_KEYS.SITES]
+        );
+        this.favicons = {
+            ...PathDock.parseLegacyFavicons(siteResult[PathDock.LEGACY_STORAGE_KEYS.FAVICONS]),
+            ...(faviconResult[PathDock.STORAGE_KEYS.FAVICONS] ?? {})
+        };
     }
 
     async saveSites() {
@@ -142,10 +128,13 @@ class PopupApp {
         });
 
         browserAPI.storage.onChanged.addListener((changes, areaName) => {
-            if (areaName === "sync" && changes[PathDock.STORAGE_KEYS.SITES]) {
-                this.reloadSites();
-            }
-            if (areaName === "local" && changes[PathDock.STORAGE_KEYS.FAVICONS]) {
+            const sitesChanged = changes[PathDock.STORAGE_KEYS.SITES] ||
+                changes[PathDock.LEGACY_STORAGE_KEYS.SITES];
+            const faviconsChanged = changes[PathDock.STORAGE_KEYS.FAVICONS] ||
+                changes[PathDock.LEGACY_STORAGE_KEYS.FAVICONS];
+
+            if ((areaName === "sync" && (sitesChanged || faviconsChanged)) ||
+                (areaName === "local" && faviconsChanged)) {
                 this.reloadSites();
             }
         });
