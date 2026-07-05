@@ -46,10 +46,10 @@ class SiteStore {
         const url = PathDock.toStoredUrl(tab.url);
         if (!url) return { ok: false, reason: "Cannot add this page." };
         if (this.sites.some((site) => site.url === url)) {
-            return { ok: false, reason: "This site is already saved." };
+            return { ok: false, reason: "This site is already in your list." };
         }
         if (this.sites.length >= PathDock.MAX_SITES) {
-            return { ok: false, reason: `PathDock holds up to ${PathDock.MAX_SITES} sites.` };
+            return { ok: false, reason: `Cannot add more than ${PathDock.MAX_SITES} sites.` };
         }
 
         this.sites.push({
@@ -87,16 +87,15 @@ class SiteStore {
 class PopupApp {
     constructor() {
         this.store = new SiteStore();
-        this.dragIndex = null;
+        this.draggedElement = null;
+        this.draggedIndex = null;
         this.ip = "";
-        this.statusTimer = null;
         this.elements = {
             addCurrent: document.getElementById("add-current-btn"),
             copyIp: document.getElementById("copy-ip-btn"),
             ip: document.getElementById("public-ip"),
-            sites: document.getElementById("sites"),
-            status: document.getElementById("status"),
-            youtubeForm: document.getElementById("youtube-search"),
+            sites: document.getElementById("buttons-container"),
+            youtubeButton: document.querySelector("#youtube-search button"),
             youtubeInput: document.getElementById("youtube-search-input")
         };
     }
@@ -111,11 +110,13 @@ class PopupApp {
 
     bindEvents() {
         this.elements.addCurrent.addEventListener("click", () => this.addCurrentTab());
-        this.elements.copyIp.addEventListener("click", () => this.copyIp());
-        this.elements.youtubeForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            this.searchYouTube();
+        this.elements.copyIp.addEventListener("click", (event) => this.copyIp(event));
+        this.elements.youtubeInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                this.searchYouTube();
+            }
         });
+        this.elements.youtubeButton.addEventListener("click", () => this.searchYouTube());
 
         browserAPI.storage.onChanged.addListener((changes, areaName) => {
             if ((areaName === "sync" && changes[PathDock.STORAGE_KEYS.SITES]) ||
@@ -134,33 +135,30 @@ class PopupApp {
         this.elements.sites.replaceChildren(
             ...this.store.sites.map((site, index) => this.createSiteButton(site, index))
         );
+
+        requestAnimationFrame(() => this.updateHeight());
+    }
+
+    updateHeight() {
+        const topBar = document.getElementById("top-bar");
+        const topBarHeight = topBar ? topBar.offsetHeight : 56;
+        const containerHeight = this.elements.sites.offsetHeight || 0;
+        const height = topBarHeight + containerHeight;
+
+        document.documentElement.style.height = `${Math.max(height, topBarHeight)}px`;
     }
 
     createSiteButton(site, index) {
-        const button = document.createElement("button");
+        const button = document.createElement("div");
         button.className = "site-button";
-        button.type = "button";
         button.draggable = true;
-        button.title = site.url;
         button.dataset.index = String(index);
-        button.addEventListener("click", () => this.openSite(site.url));
-        button.addEventListener("dragstart", (event) => this.onDragStart(event, index));
-        button.addEventListener("dragover", (event) => event.preventDefault());
-        button.addEventListener("drop", (event) => this.onDrop(event, index));
-        button.addEventListener("dragend", () => {
-            this.dragIndex = null;
-            button.classList.remove("dragging");
-        });
+        button.dataset.url = site.url;
 
         const remove = document.createElement("span");
-        remove.className = "remove-site";
-        remove.textContent = "x";
+        remove.className = "close-btn";
         remove.title = "Remove";
-        remove.setAttribute("role", "button");
-        remove.addEventListener("click", (event) => {
-            event.stopPropagation();
-            this.removeSite(site.url);
-        });
+        remove.textContent = "×";
 
         const favicon = document.createElement("img");
         favicon.className = "favicon";
@@ -171,134 +169,188 @@ class PopupApp {
             favicon.src = PathDock.fallbackFaviconUrl(site.url);
         }, { once: true });
 
-        const title = document.createElement("span");
+        const title = document.createElement("div");
         title.className = "site-title";
         title.textContent = site.title;
 
-        const url = document.createElement("span");
+        const url = document.createElement("div");
         url.className = "site-url";
-        url.textContent = PathDock.displayUrl(site.url);
+        url.textContent = this.shortenUrl(site.url);
 
         button.append(remove, favicon, title, url);
+        button.addEventListener("click", (event) => this.handleSiteClick(event, site.url));
+        button.addEventListener("dragstart", (event) => this.handleDragStart(event, index));
+        button.addEventListener("dragover", (event) => this.handleDragOver(event));
+        button.addEventListener("drop", (event) => this.handleDrop(event, index));
+        button.addEventListener("dragend", () => this.handleDragEnd());
+
         return button;
     }
 
-    async addCurrentTab() {
-        const [tab] = await browserAPI.tabs.query({ active: true, currentWindow: true });
-        const result = await this.store.add(tab ?? {});
-
-        if (!result.ok) {
-            this.setStatus(result.reason);
-            return;
+    handleSiteClick(event, url) {
+        if (event.target.classList.contains("close-btn")) {
+            event.stopPropagation();
+            this.removeSite(url);
+        } else if (!event.target.closest(".close-btn")) {
+            this.openSite(url);
         }
+    }
 
-        this.render();
-        this.setStatus("Site saved.");
+    async addCurrentTab() {
+        try {
+            const [tab] = await browserAPI.tabs.query({ active: true, currentWindow: true });
+            const result = await this.store.add(tab ?? {});
+
+            if (!result.ok) {
+                alert(result.reason);
+                return;
+            }
+
+            this.render();
+        } catch (error) {
+            console.error("Failed to add current tab:", error);
+            alert("Failed to add site.");
+        }
     }
 
     async removeSite(url) {
         await this.store.remove(url);
         this.render();
-        this.setStatus("Site removed.");
     }
 
-    async openSite(url) {
-        const [tab] = await browserAPI.tabs.query({ active: true, currentWindow: true });
-        if (tab?.id && PathDock.isNewTabUrl(tab.url)) {
-            await browserAPI.tabs.update(tab.id, { url });
-        } else {
-            await browserAPI.tabs.create({ url });
-        }
-        window.close();
+    openSite(url) {
+        closeAllNewTabs();
+        browserAPI.tabs.create({ url });
     }
 
-    onDragStart(event, index) {
-        this.dragIndex = index;
-        event.currentTarget.classList.add("dragging");
+    handleDragStart(event, index) {
+        this.draggedElement = event.target;
+        this.draggedIndex = index;
+        event.target.classList.add("dragging");
         event.dataTransfer.effectAllowed = "move";
     }
 
-    async onDrop(event, index) {
+    handleDragOver(event) {
         event.preventDefault();
-        await this.store.move(this.dragIndex, index);
-        this.dragIndex = null;
-        this.render();
+        event.dataTransfer.dropEffect = "move";
+    }
+
+    async handleDrop(event, index) {
+        event.preventDefault();
+        if (this.draggedIndex !== null && this.draggedIndex !== index) {
+            await this.store.move(this.draggedIndex, index);
+            this.render();
+        }
+    }
+
+    handleDragEnd() {
+        if (this.draggedElement) {
+            this.draggedElement.classList.remove("dragging");
+        }
+        this.draggedElement = null;
+        this.draggedIndex = null;
     }
 
     searchYouTube() {
-        const query = PathDock.cleanText(this.elements.youtubeInput.value);
-        if (!query) return;
-
-        browserAPI.tabs.create({ url: PathDock.youtubeSearchUrl(query) });
-        this.elements.youtubeInput.value = "";
+        const query = this.elements.youtubeInput.value.trim();
+        if (query) {
+            browserAPI.tabs.create({ url: PathDock.youtubeSearchUrl(query) });
+        }
     }
 
     async loadPublicIp() {
-        const cached = await browserAPI.storage.local.get({
-            [PathDock.STORAGE_KEYS.IP_CACHE]: null
-        });
-        const cache = cached[PathDock.STORAGE_KEYS.IP_CACHE];
-
-        if (cache?.ip && Date.now() - cache.time < PathDock.IP_CACHE_TTL_MS) {
-            this.setIp(cache.ip);
-        } else {
-            this.elements.ip.textContent = "...";
-        }
-
         try {
+            this.elements.ip.textContent = "...";
+
+            const cached = await browserAPI.storage.local.get({
+                [PathDock.STORAGE_KEYS.IP_CACHE]: null
+            });
+            const cache = cached[PathDock.STORAGE_KEYS.IP_CACHE];
+
+            if (cache?.ip && Date.now() - cache.time < PathDock.IP_CACHE_TTL_MS) {
+                this.ip = cache.ip;
+                this.elements.ip.textContent = this.ip;
+            }
+
             const response = await fetch("https://api.ipify.org?format=json");
-            if (!response.ok) throw new Error(`IP lookup failed: ${response.status}`);
+            if (!response.ok) throw new Error("Network error");
 
             const data = await response.json();
-            if (!data.ip) throw new Error("IP lookup returned no address.");
+            this.ip = data.ip;
+            this.elements.ip.textContent = this.ip;
 
             await browserAPI.storage.local.set({
                 [PathDock.STORAGE_KEYS.IP_CACHE]: {
-                    ip: data.ip,
+                    ip: this.ip,
                     time: Date.now()
                 }
             });
-            this.setIp(data.ip);
-        } catch {
+        } catch (error) {
+            console.error("Error fetching IP:", error);
             if (!this.ip) {
-                this.elements.ip.textContent = "IP unavailable";
+                this.elements.ip.textContent = "N/A";
             }
         }
     }
 
-    setIp(ip) {
-        this.ip = ip;
-        this.elements.ip.textContent = ip;
-        this.elements.copyIp.disabled = false;
-    }
+    async copyIp(event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-    async copyIp() {
         if (!this.ip) return;
 
-        const copied = await this.copyText(this.ip);
-        this.setStatus(copied ? "IP copied." : "Copy failed.");
-    }
-
-    async copyText(text) {
         try {
-            await navigator.clipboard.writeText(text);
-            return true;
+            await navigator.clipboard.writeText(this.ip);
+
+            const originalText = this.elements.copyIp.textContent;
+            this.elements.copyIp.textContent = "✓";
+            this.elements.copyIp.style.color = "#28a745";
+
+            setTimeout(() => {
+                this.elements.copyIp.textContent = originalText;
+                this.elements.copyIp.style.color = "";
+            }, 1000);
         } catch {
-            return false;
         }
     }
 
-    setStatus(message) {
-        clearTimeout(this.statusTimer);
-        this.elements.status.textContent = message;
-        this.statusTimer = setTimeout(() => {
-            this.elements.status.textContent = "";
-        }, 1600);
+    shortenUrl(url) {
+        try {
+            const urlObj = new URL(url);
+            let display = urlObj.hostname;
+            if (urlObj.pathname !== "/") {
+                display += urlObj.pathname;
+            }
+            return display.length > 40 ? `${display.substring(0, 37)}...` : display;
+        } catch {
+            return url.length > 40 ? `${url.substring(0, 37)}...` : url;
+        }
     }
+}
+
+function closeAllNewTabs() {
+    browserAPI.tabs.query({}).then((tabs) => {
+        const tabIds = tabs
+            .filter((tab) => {
+                const url = tab.url || "";
+                const matchesKnownUrl = PathDock.isNewTabUrl(url);
+                const matchesPattern =
+                    url.includes("newtab") ||
+                    url.includes("startpage") ||
+                    url.includes("new-tab-page");
+
+                return matchesKnownUrl || matchesPattern;
+            })
+            .map((tab) => tab.id);
+
+        if (tabIds.length > 0) {
+            browserAPI.tabs.remove(tabIds);
+        }
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     new PopupApp().start().catch((error) => {
-        console.error("PathDock failed to start:", error);
+        console.error("Failed to initialize app:", error);
     });
 });
