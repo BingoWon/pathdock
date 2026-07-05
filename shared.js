@@ -6,10 +6,6 @@ globalThis.PathDock = (() => {
         FAVICONS: "pathdock.favicons",
         IP_CACHE: "pathdock.ipCache"
     });
-    const LEGACY_STORAGE_KEYS = Object.freeze({
-        SITES: "sites",
-        FAVICONS: "favIconUrls"
-    });
 
     const SEARCH_COMMANDS = new Set(["quick_search", "direct_search"]);
     const MAX_SITES = 48;
@@ -152,46 +148,6 @@ globalThis.PathDock = (() => {
         return sites;
     }
 
-    function mergeSites(...siteLists) {
-        const sitesByUrl = new Map();
-
-        for (const siteList of siteLists) {
-            for (const site of normalizeSites(siteList)) {
-                sitesByUrl.set(site.url, {
-                    ...sitesByUrl.get(site.url),
-                    ...site
-                });
-            }
-        }
-
-        return [...sitesByUrl.values()].slice(0, MAX_SITES);
-    }
-
-    function parseJson(value) {
-        if (!value) return null;
-        if (typeof value !== "string") return value;
-
-        try {
-            return JSON.parse(value);
-        } catch {
-            return null;
-        }
-    }
-
-    function parseLegacySites(value) {
-        const data = parseJson(value);
-        return normalizeSites(data?.sites);
-    }
-
-    function parseLegacyFavicons(value) {
-        const data = parseJson(value);
-        if (!data || Array.isArray(data) || typeof data !== "object") return {};
-
-        return Object.fromEntries(
-            Object.entries(data).filter(([, faviconUrl]) => isUsableFaviconUrl(faviconUrl))
-        );
-    }
-
     function searchUrl(query) {
         return `https://duckduckgo.com/?q=${encodeURIComponent(cleanText(query))}`;
     }
@@ -218,7 +174,6 @@ globalThis.PathDock = (() => {
 
     return Object.freeze({
         IP_CACHE_TTL_MS,
-        LEGACY_STORAGE_KEYS,
         MAX_SITES,
         SEARCH_COMMANDS,
         STORAGE_KEYS,
@@ -228,10 +183,7 @@ globalThis.PathDock = (() => {
         hostKey,
         isNewTabUrl,
         isUsableFaviconUrl,
-        mergeSites,
         normalizeSites,
-        parseLegacyFavicons,
-        parseLegacySites,
         searchUrl,
         siteId,
         titleFromUrl,

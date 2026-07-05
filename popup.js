@@ -8,22 +8,12 @@ class SiteStore {
 
     async load() {
         const [siteResult, faviconResult] = await Promise.all([
-            browserAPI.storage.sync.get({
-                [PathDock.STORAGE_KEYS.SITES]: [],
-                [PathDock.LEGACY_STORAGE_KEYS.SITES]: null,
-                [PathDock.LEGACY_STORAGE_KEYS.FAVICONS]: null
-            }),
+            browserAPI.storage.sync.get({ [PathDock.STORAGE_KEYS.SITES]: [] }),
             browserAPI.storage.local.get({ [PathDock.STORAGE_KEYS.FAVICONS]: {} })
         ]);
 
-        this.sites = PathDock.mergeSites(
-            PathDock.parseLegacySites(siteResult[PathDock.LEGACY_STORAGE_KEYS.SITES]),
-            siteResult[PathDock.STORAGE_KEYS.SITES]
-        );
-        this.favicons = {
-            ...PathDock.parseLegacyFavicons(siteResult[PathDock.LEGACY_STORAGE_KEYS.FAVICONS]),
-            ...(faviconResult[PathDock.STORAGE_KEYS.FAVICONS] ?? {})
-        };
+        this.sites = PathDock.normalizeSites(siteResult[PathDock.STORAGE_KEYS.SITES]);
+        this.favicons = faviconResult[PathDock.STORAGE_KEYS.FAVICONS] ?? {};
     }
 
     async saveSites() {
@@ -128,13 +118,8 @@ class PopupApp {
         });
 
         browserAPI.storage.onChanged.addListener((changes, areaName) => {
-            const sitesChanged = changes[PathDock.STORAGE_KEYS.SITES] ||
-                changes[PathDock.LEGACY_STORAGE_KEYS.SITES];
-            const faviconsChanged = changes[PathDock.STORAGE_KEYS.FAVICONS] ||
-                changes[PathDock.LEGACY_STORAGE_KEYS.FAVICONS];
-
-            if ((areaName === "sync" && (sitesChanged || faviconsChanged)) ||
-                (areaName === "local" && faviconsChanged)) {
+            if ((areaName === "sync" && changes[PathDock.STORAGE_KEYS.SITES]) ||
+                (areaName === "local" && changes[PathDock.STORAGE_KEYS.FAVICONS])) {
                 this.reloadSites();
             }
         });

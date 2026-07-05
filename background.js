@@ -4,13 +4,9 @@ importScripts("browserAPI.js", "shared.js");
 
 async function loadSites() {
     const result = await browserAPI.storage.sync.get({
-        [PathDock.STORAGE_KEYS.SITES]: [],
-        [PathDock.LEGACY_STORAGE_KEYS.SITES]: null
+        [PathDock.STORAGE_KEYS.SITES]: []
     });
-    return PathDock.mergeSites(
-        PathDock.parseLegacySites(result[PathDock.LEGACY_STORAGE_KEYS.SITES]),
-        result[PathDock.STORAGE_KEYS.SITES]
-    );
+    return PathDock.normalizeSites(result[PathDock.STORAGE_KEYS.SITES]);
 }
 
 async function saveFavicon(url, faviconUrl) {
